@@ -1,10 +1,15 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client"
-import { Search, MessageSquare, Bell, User } from "lucide-react"
-import Sidebar from "@/components/layout/Sidebar"
 import { useEffect, useState } from "react"
+import { Search, MessageSquare, Bell, User } from "lucide-react"
+
+import Sidebar from "@/components/layout/Sidebar"
 import UserCard from "@/components/dashboard/UserCard"
 import CountChart from "@/components/dashboard/CountChart"
+import AttendanceChart from "@/components/dashboard/AttendanceChart"
+import FinanceChart from "@/components/dashboard/FinanceChart"
+import EventCalendar from "@/components/dashboard/EventCalendar"
+import Announcements from "@/components/dashboard/Announcements"
 
 type School = {
   id: string
@@ -110,10 +115,10 @@ export default function Dashboard() {
         <div className='w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] p-4'>
           <Sidebar role='SUPER_ADMIN' />
         </div>
-        <div className='w-[86%] md:w-[92%] lg:w-[84%] xl-w-[86%] bg-[#f7f8fa] overflow-y-auto flex flex-col'>
+        <div className='w-[86%] md:w-[92%] lg:w-[84%] xl-w-[86%] bg-[#f7f8fa] flex flex-col'>
           <div className='flex justify-between items-center p-4'>
             {/* Searchbar */}
-            <div className='hidden md:flex items-center gap-2 text-xs  ring-[1.5px] ring-blue-dark px-2'>
+            <div className='hidden md:flex items-center gap-2 text-xs  ring-[1.5px] ring-blue-main px-2'>
               <input
                 type='text'
                 name=''
@@ -123,7 +128,7 @@ export default function Dashboard() {
                 placeholder='Search...'
                 className='w-[200px] p-2 bg-transparent outline-none'
               />
-              <Search className='text-blue-dark  w-5 h-5' />
+              <Search className='text-blue-main  w-5 h-5' />
               {searchTerm && (
                 <div className='absolute top-full left-0 mt-2 w-full bg-white shadow-lg rounded-md z-50'>
                   {filterData.length > 0 ? (
@@ -186,72 +191,71 @@ export default function Dashboard() {
                   <UserCard type='Total Staff' />
                   <UserCard type='Detaprtments' />
                 </div>
+                {/* other actions */}
+                <div className='w-full bg-white gap-4 p-4'>
+                  <div>
+                    <input
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder='School name'
+                      className='border p-2'
+                    />
+                    <button
+                      onClick={addSchool}
+                      className='ml-2 bg-blue-500 text-white px-4 py-2'>
+                      Add
+                    </button>
+                  </div>
+                  {/* List Schools */}
+                  <div className='mt-6'>
+                    {schools.length === 0 ? (
+                      <p>No schools found</p>
+                    ) : (
+                      schools.map((s) => (
+                        <div
+                          key={s.id}
+                          className='flex justify-between border p-2 mt-2'>
+                          <span>{s.name}</span>
+
+                          <div className='flex gap-2'>
+                            <button
+                              onClick={() => editSchool(s.id)}
+                              className='text-blue-500'>
+                              Edit
+                            </button>
+
+                            <button
+                              onClick={() => deleteSchool(s.id)}
+                              className='text-red-500'>
+                              Delete
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
                 {/* middle chart */}
                 <div className='flex flex-col lg:flex-row gap-4'>
                   {/* count chart */}
                   <div className='w-full lg:w-1/3 h-[450px]'>
                     <CountChart />
                   </div>
-                  attendance chart
+                  {/* attendance chart */}
                   <div className='w-full lg:w-2/3 h-[450px]'>
-                    AttendanceChart
+                    <AttendanceChart />
                   </div>
                 </div>
-                {/* <div className='flex flex-col lg:flex-row gap-4'>
-                  count chart
-                  <div className='w-full lg:w-1/3 h-[450px]'>CountChart</div>
-                  attendance chart
-                  <div className='w-full lg:w-2/3 h-[450px]'>
-                    AttendanceChart
-                  </div>
+
+                {/* bottom chart */}
+                <div className='w-full h-[500px]'>
+                  <FinanceChart />
                 </div>
-                bottom chart
-                <div className='w-full h-[500px]'>FinanceChart</div> */}
-                {/* <div className='mt-6'>
-                  <input
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder='School name'
-                    className='border p-2'
-                  />
-                  <button
-                    onClick={addSchool}
-                    className='ml-2 bg-blue-500 text-white px-4 py-2'>
-                    Add
-                  </button>
-                </div> */}
-                {/* List Schools */}
-                {/* <div className='mt-6'>
-                  {schools.length === 0 ? (
-                    <p>No schools found</p>
-                  ) : (
-                    schools.map((s) => (
-                      <div
-                        key={s.id}
-                        className='flex justify-between border p-2 mt-2'>
-                        <span>{s.name}</span>
-
-                        <div className='flex gap-2'>
-                          <button
-                            onClick={() => editSchool(s.id)}
-                            className='text-blue-500'>
-                            Edit
-                          </button>
-
-                          <button
-                            onClick={() => deleteSchool(s.id)}
-                            className='text-red-500'>
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div> */}
               </div>
-              {/* <div className='w-full lg:w-1/3 flex flex-col gap-8'>
-                EventCalendar Announcements
-              </div> */}
+              <div className='w-full lg:w-1/3 flex flex-col gap-8'>
+                <EventCalendar />
+                <Announcements />
+              </div>
             </div>
             {/* main - Total Schools Total Students (all schools) Total Revenue Active Schools
       New Schools this month */}
