@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import * as bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 
 const prisma = new PrismaClient();
 
@@ -37,7 +38,8 @@ export async function POST(req: Request) {
         }
 
         // 3. Success
-        return NextResponse.json({
+
+        const response = NextResponse.json({
             message: "Login successful",
             user: {
                 id: user.id,
@@ -46,6 +48,13 @@ export async function POST(req: Request) {
                 schoolId: user.schoolId,
             },
         });
+
+        // set cookie
+        response.cookies.set("token", user.id, {
+            httpOnly: true,
+            path: "/",
+        })
+        return response
 
     } catch (error) {
         console.log(error)

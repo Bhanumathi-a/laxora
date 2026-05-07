@@ -28,7 +28,6 @@ async function main() {
         });
 
         console.log("✅ Admin created:", admin);
-
     } catch (error) {
         console.error("❌ Failed:", error);
     } finally {

@@ -6,6 +6,19 @@
 }
 
 @theme inline {
+  --color-bg-light: #e7f0fa;
+
+  --color-blue-light: #7ba4d0;
+  --color-blue-light2: #c3dbfa;
+  --color-blue-main: #2e5e99;
+  --color-brand: #0d2440;
+  /* teal */
+  /* --color-brand: #00978c; */
+  --color-teal-2: #33aca3;
+  --color-teal-3: #66c1ba;
+  --color-teal-4: #99d5d1;
+  --color-teal-5: #cceae8;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);

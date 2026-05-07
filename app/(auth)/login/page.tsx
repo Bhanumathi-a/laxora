@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 
 export default function Login() {
   const router = useRouter()
@@ -53,14 +54,25 @@ export default function Login() {
 
                 <button
                   onClick={handleLogin}
-                  className='mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none'>
+                  className='mt-5 w-full py-4 rounded-lg font-semibold tracking-wide bg-brand text-white hover:bg-blue-main transition duration-300 cursor-pointer'>
                   <span className='ml-3'>Sign In</span>
                 </button>
               </div>
             </div>
           </div>
         </div>
-        <div className='flex-1 bg-indigo-100 text-center hidden lg:flex'></div>
+        <div className='flex-1 bg-blue-light2 text-center hidden lg:flex'>
+          <div className='w-[500px] m-auto'>
+            <Image
+              src='/laxora_logo.png'
+              width={1024}
+              height={299}
+              alt='Laxora'
+              className='w-full h-auto'
+              loading='eager'
+            />
+          </div>
+        </div>
       </div>
     </div>
   )
