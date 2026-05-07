@@ -7,28 +7,34 @@ import AttendanceChart from "@/components/dashboard/AttendanceChart"
 import FinanceChart from "@/components/dashboard/FinanceChart"
 import EventCalendar from "@/components/dashboard/EventCalendar"
 import Announcements from "@/components/dashboard/Announcements"
-export default async function SchoolDashboard({
-  params,
-}: {
-  params: Promise<{ id: string }>
-}) {
-  const { id } = await params
-  // const logout = async () => {
-  //   await fetch("/api/logout", { method: "POST" })
-  //   window.location.href = "/login"
-  // }
+import { PrismaClient } from "@prisma/client"
+
+const prisma = new PrismaClient()
+
+type Props = {
+  params: Promise<{
+    slug: string
+  }>
+}
+
+export default async function SchoolDashboard({ params }: Props) {
+  const { slug } = await params
+  const school = await prisma.school.findUnique({
+    where: { slug },
+  })
+
+  if (!school) {
+    return <div>School not found</div>
+  }
+
   return (
     <>
-      {/* <button
-        onClick={logout}
-        className='mt-5 w-auto py-4 rounded-lg font-semibold tracking-wide bg-brand text-white hover:bg-blue-main transition duration-300 cursor-pointer inline-block'>
-        <span className='ml-3'>Logout</span>
-      </button> */}
       {/* Sidebar Top Navbar 4 Stats Cards Students Table Attendance Chart
       Announcements */}
+      {/* School slug: {slug} */}
       <div className='h-screen flex'>
         <div className='w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] p-4'>
-          <Sidebar role='ADMIN' />
+          <Sidebar role='ADMIN' slug={slug} schoolName={school.name} />
         </div>
         <div className='w-[86%] md:w-[92%] lg:w-[84%] xl-w-[86%] bg-[#f7f8fa] flex flex-col'>
           <div className='flex justify-between items-center p-4'>

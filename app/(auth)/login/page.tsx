@@ -26,7 +26,7 @@ export default function Login() {
     if (data.user.role === "SUPER_ADMIN") {
       router.push("/dashboard")
     } else {
-      router.push(`/school-dashboard/${data.user.schoolId}`)
+      router.push(`/school/${data.user.schoolSlug}`)
     }
   }
   return (

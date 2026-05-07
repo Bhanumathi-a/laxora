@@ -10,6 +10,7 @@ async function main() {
             update: {},
             create: {
                 name: "Laxora Demo School",
+                slug: "laxora_demo"
             },
         });
 
@@ -19,6 +20,7 @@ async function main() {
             update: {},
             create: {
                 name: "Vidyasagar School",
+                slug: "vidyasagar",
             },
         });
 

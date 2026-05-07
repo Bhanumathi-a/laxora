@@ -16,9 +16,13 @@ export async function POST(req: Request) {
         }
 
         // 1. Check user
+
         const user = await prisma.user.findUnique({
             where: { email },
-        });
+            include: {
+                school: true,
+            },
+        })
 
         if (!user) {
             return NextResponse.json(
@@ -45,7 +49,7 @@ export async function POST(req: Request) {
                 id: user.id,
                 email: user.email,
                 role: user.role,
-                schoolId: user.schoolId,
+                schoolSlug: user.school.slug,
             },
         });
 

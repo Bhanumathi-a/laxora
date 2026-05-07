@@ -13,6 +13,7 @@ model School {
 
   users    User[]
   students Student[]
+  slug  String @unique
 }
 
 model User {
