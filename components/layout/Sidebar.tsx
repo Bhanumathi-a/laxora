@@ -24,7 +24,10 @@ export default function Sidebar({ role, slug, schoolName }: SidebarProps) {
               role === "SUPER_ADMIN" ? item.href : `/school/${slug}${item.href}`
             }
             className='flex items-center justify-center lg:justify-start gap-4 text-gray-500 md:px-3 py-1 hover:bg-primary-lighter'>
-            <span className='hidden lg:block'>{item.label}</span>
+            <span className='hidden lg:block'>
+              {item.label}
+              {/* {item.href}  */}
+            </span>
           </Link>
         ))}
       </nav>

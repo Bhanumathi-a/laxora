@@ -4,10 +4,10 @@ import { LayoutDashboard, Building2, Users } from 'lucide-react';
 
 export const superAdminMenu = [
     { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard, },
-    { label: "Schools", href: "/dashboard/schools" },
-    { label: "Subscription", href: "/dashboard/subscription" },
-    { label: "Reports", href: "/dashboard/reports" },
-    { label: "Support / Ticket", href: "/dashboard/support" },
+    { label: "Schools", href: "/schools" },
+    { label: "Subscription", href: "/subscription" },
+    { label: "Reports", href: "/reports" },
+    { label: "Support / Ticket", href: "/support" },
 ]
 
 export const schoolAdminMenu = [
