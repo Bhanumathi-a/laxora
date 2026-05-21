@@ -1,21 +1,14 @@
 import { Bell, MessageSquare, Search, User } from "lucide-react"
 import React from "react"
+import { SearchBox } from "../ui/SearchBox"
 
 export const Header = () => {
   return (
     <>
       <div className='flex justify-between items-center p-4'>
         {/* Searchbar */}
-        <div className='hidden md:flex items-center gap-2 text-xs  ring-[1.5px] ring-brand px-2'>
-          <input
-            type='text'
-            name=''
-            id=''
-            placeholder='Search...'
-            className='width-[200px] p-2 bg-transparent outline-none'
-          />
-          <Search className='text-brand  w-5 h-5' />
-        </div>
+        <SearchBox />
+
         {/* icons and user */}
         <div className='flex items-center justify-end gap-3 w-full'>
           <div className='bg-white rounded-full w-7 h-7 flex items-center justify-center cursor-pointer relative'>

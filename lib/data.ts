@@ -22,7 +22,7 @@ export const studentsData = [
             "https://images.unsplash.com/photo-1494790108377-be9c29b29330",
     },
     {
-        id: 1,
+        id: 3,
         name: "Sarah",
         class: "4B",
         studentId: "1234567890",
