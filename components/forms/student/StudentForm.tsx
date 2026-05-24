@@ -1,3 +1,4 @@
+import { Student } from "@/types/student"
 import InputField from "../shared/InputField"
 import ImageUpload from "../shared/ImageUpload"
 import InputButton from "../shared/InputButton"
@@ -9,15 +10,62 @@ import { StudentFormData, studentSchema } from "@/lib/validations/student"
 
 type StudentFormProps = {
   mode: "create" | "edit"
-  //   studentData?: Student
+  studentData?: Student
+  setOpen: (open: boolean) => void
+  students: Student[]
+  setStudents: React.Dispatch<React.SetStateAction<Student[]>>
 }
-
-const StudentForm = ({ mode }: StudentFormProps) => {
+const StudentForm = ({
+  mode,
+  studentData,
+  setOpen,
+  students,
+  setStudents,
+}: StudentFormProps) => {
   const [loading, setLoading] = useState(false)
   const onSubmit = async (data: StudentFormData) => {
-    console.log(data)
-  }
+    if (mode === "create") {
+      const newStudent: Student = {
+        id: crypto.randomUUID(),
+        schoolId: "",
+        firstName: data.firstName,
+        lastName: data.lastName,
+        gender: data.gender as "Male" | "Female" | "Other",
+        studentId: data.studentId,
+        email: data.email,
+        phone: data.phone,
+        address: data.address,
+        city: data.city,
+        pin: data.pin,
+        state: data.state,
+        country: data.country,
+        grade: data.grade,
+        image: "",
+      }
+      // setStudents((prev) => [...prev, newStudent])
+      // reset()
+      // setOpen(false)
+      const response = await fetch("/api/students", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newStudent),
+      })
 
+      const result = await response.json()
+
+      if (!response.ok) {
+        console.log(result.message)
+        return
+      }
+
+      setStudents((prev) => [...prev, result.student])
+
+      reset()
+      setOpen(false)
+    }
+  }
   const {
     register,
     handleSubmit,
@@ -25,8 +73,8 @@ const StudentForm = ({ mode }: StudentFormProps) => {
     formState: { errors },
   } = useForm<StudentFormData>({
     resolver: zodResolver(studentSchema),
+    defaultValues: mode === "edit" ? studentData : {},
   })
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className='space-y-12 overflow-auto'>
@@ -34,7 +82,6 @@ const StudentForm = ({ mode }: StudentFormProps) => {
           <h2 className='text-base/7 font-semibold text-gray-900'>
             {mode === "create" ? "Register Student" : "Update Student"}
           </h2>
-
           <div className='mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
             <div className='sm:col-span-3'>
               <InputField label='First name' {...register("firstName")} />
@@ -81,7 +128,6 @@ const StudentForm = ({ mode }: StudentFormProps) => {
                 <p className='text-red-400'>{errors.phone.message}</p>
               )}
             </div>
-
             <div className='col-span-full'>
               <ImageUpload />
             </div>
@@ -132,26 +178,29 @@ const StudentForm = ({ mode }: StudentFormProps) => {
           </div>
         </div>
       </div>
-
       <div className='mt-6 flex items-center justify-end gap-x-6'>
         <InputButton
-          title='Reset'
+          title={mode === "create" ? "Reset" : "Cancel"}
           type='button'
           bgColor='bg-gray-300'
           textColor='text-black'
-          onClick={() => reset()}
+          onClick={() => {
+            if (mode === "create") {
+              reset()
+            } else {
+              setOpen(false)
+            }
+          }}
         />
         <InputButton
-          title='Register Student'
+          title={mode === "create" ? "Register Student" : "Update Student"}
           type='submit'
           bgColor='bg-brand'
           textColor='text-white'
           loading={loading}
-          //   onClick={() => setOpen(false)}
         />
       </div>
     </form>
   )
 }
-
 export default StudentForm

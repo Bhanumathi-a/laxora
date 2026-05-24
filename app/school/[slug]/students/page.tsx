@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma"
-
 import { Header } from "@/components/layout/Header"
 import Sidebar from "@/components/layout/Sidebar"
 import StudentTable from "@/components/dashboard/StudentTable"
@@ -19,6 +18,11 @@ const StudentList = async ({ params }: Props) => {
   if (!school) {
     return <div>School not found</div>
   }
+  const students = await prisma.student.findMany({
+    where: {
+      schoolId: school.id,
+    },
+  })
 
   return (
     <>
@@ -28,7 +32,7 @@ const StudentList = async ({ params }: Props) => {
         </div>
         <div className='w-[86%] md:w-[92%] lg:w-[84%] xl:w-[86%] bg-[#f7f8fa] flex flex-col'>
           <Header />
-          <StudentTable />
+          <StudentTable students={students} />
         </div>
       </div>
     </>

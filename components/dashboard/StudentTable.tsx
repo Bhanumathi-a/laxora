@@ -1,5 +1,4 @@
 "use client"
-
 import {
   ArrowDownWideNarrow,
   FilePenLine,
@@ -9,19 +8,41 @@ import {
   User,
 } from "lucide-react"
 import { useState } from "react"
-
-import { studentsData } from "@/lib/data"
+import { Student } from "@/types/student"
+// import { studentsData } from "@/lib/data"
 import Table from "@/components/ui/Table"
-
 import Image from "next/image"
-
 import IconButton from "@/components/ui/IconButton"
 import { SearchBox } from "@/components/ui/SearchBox"
 import FormModal from "../forms/FormModal"
 import StudentForm from "../forms/student/StudentForm"
 
-const StudentTable = () => {
+type StudentTableProps = {
+  students: Student[]
+}
+
+const StudentTable = ({ students: initialStudents }: StudentTableProps) => {
   const [open, setOpen] = useState(false)
+  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
+  const [formMode, setFormMode] = useState<"create" | "edit">("create")
+  // sort
+  const [sortBy, setSortBy] = useState("")
+  const [showSort, setShowSort] = useState(false)
+  // const [students, setStudents] = useState<Student[]>(studentsData)
+  const [students, setStudents] = useState<Student[]>(initialStudents)
+
+  const sortedStudents = [...students].sort((a, b) => {
+    if (sortBy === "name") {
+      return a.firstName.localeCompare(b.firstName)
+    }
+    if (sortBy === "grade") {
+      return a.grade.localeCompare(b.grade)
+    }
+    if (sortBy === "studentId") {
+      return a.studentId.localeCompare(b.studentId)
+    }
+    return 0
+  })
   const columns = [
     {
       header: "Info",
@@ -48,16 +69,6 @@ const StudentTable = () => {
       accessor: "action",
     },
   ]
-  type Student = {
-    id: number
-    name: string
-    class: string
-    studentId: string
-    grade: number
-    phone: string
-    address: string
-    image: string
-  }
   const renderRow = (item: Student) => (
     <tr
       key={item.id}
@@ -66,7 +77,7 @@ const StudentTable = () => {
         {item.image ? (
           <Image
             src={item.image}
-            alt={item.name}
+            alt={item.firstName}
             width={40}
             height={40}
             className='w-10 h-10 rounded-full object-cover'
@@ -76,13 +87,13 @@ const StudentTable = () => {
             <User className='w-5 h-5 text-gray-500' />
           </div>
         )}
-
         <div className='flex flex-col'>
-          <h3 className='font-semibold'>{item.name}</h3>
-          <p className='text-xs text-gray-500'>{item.class}</p>
+          <h3 className='font-semibold'>
+            {item.firstName} {item.lastName}
+          </h3>
+          <p className='text-xs text-gray-500'>{item.grade}</p>
         </div>
       </td>
-
       <td>{item.studentId}</td>
       <td>{item.grade}</td>
       <td>{item.phone}</td>
@@ -94,7 +105,11 @@ const StudentTable = () => {
               icon={FilePenLine}
               bgColor='bg-blue-lighter'
               iconColor='text-blue-dark'
-              onClick={() => setOpen(true)}
+              onClick={() => {
+                setFormMode("edit")
+                setSelectedStudent(item)
+                setOpen(true)
+              }}
             />
             <IconButton
               icon={Trash2}
@@ -106,7 +121,6 @@ const StudentTable = () => {
       )}
     </tr>
   )
-
   const role = "ADMIN"
   return (
     <>
@@ -122,35 +136,85 @@ const StudentTable = () => {
                 bgColor='bg-blue-lighter'
                 iconColor='text-blue-dark'
               />
-              <IconButton
+              <div className='relative'>
+                <IconButton
+                  icon={ArrowDownWideNarrow}
+                  bgColor='bg-blue-lighter'
+                  iconColor='text-blue-dark'
+                  onClick={() => setShowSort(!showSort)}
+                />
+                {showSort && (
+                  <div className='absolute right-0 mt-2 bg-white shadow-lg border rounded-lg p-2 z-50 w-40'>
+                    <button
+                      onClick={() => {
+                        setSortBy("name")
+                        setShowSort(false)
+                      }}
+                      className='block w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md'>
+                      Sort by Name
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSortBy("grade")
+                        setShowSort(false)
+                      }}
+                      className='block w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md'>
+                      Sort by Grade
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSortBy("studentId")
+                        setShowSort(false)
+                      }}
+                      className='block w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md'>
+                      Sort by ID
+                    </button>
+                  </div>
+                )}
+              </div>
+              {/* <IconButton
                 icon={ArrowDownWideNarrow}
                 bgColor='bg-blue-lighter'
                 iconColor='text-blue-dark'
-              />
+              /> */}
               {role === "ADMIN" && (
                 <IconButton
                   icon={Plus}
                   bgColor='bg-blue-lighter'
                   iconColor='text-blue-dark'
-                  onClick={() => setOpen(true)}
+                  onClick={() => {
+                    setFormMode("create")
+                    setSelectedStudent(null)
+                    setOpen(true)
+                  }}
                 />
               )}
             </div>
           </div>
         </div>
-
-        <Table columns={columns} data={studentsData} renderRow={renderRow} />
+        {sortedStudents.length === 0 ? (
+          <div className='flex items-center justify-center py-10 text-gray-500'>
+            No students found
+          </div>
+        ) : (
+          <Table
+            columns={columns}
+            data={sortedStudents}
+            renderRow={renderRow}
+          />
+        )}
         {/* <Pagination /> */}
       </div>
-
       <FormModal open={open} setOpen={setOpen}>
-        <StudentForm mode='create' />
+        <StudentForm
+          mode={formMode}
+          studentData={selectedStudent || undefined}
+          setOpen={setOpen}
+          students={students}
+          setStudents={setStudents}
+        />
       </FormModal>
-      {/* <FormModal open={open} setOpen={setOpen}>
-        <StudentForm mode='edit' />
-      </FormModal> */}
     </>
   )
 }
-
 export default StudentTable
