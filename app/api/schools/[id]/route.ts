@@ -1,25 +1,53 @@
-import { NextResponse } from "next/server";
-import { PrismaClient } from "@prisma/client";
+import { NextResponse } from "next/server"
+import { PrismaClient } from "@prisma/client"
 
-const prisma = new PrismaClient();
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
-    const { name } = await req.json();
+const prisma = new PrismaClient()
 
-    const school = await prisma.school.update({
-        where: { id: params.id },
-        data: { name },
-    });
+export async function PUT(
+    req: Request,
+    context: { params: Promise<{ id: string }> }
+) {
+    try {
+        const { id } = await context.params
 
-    return NextResponse.json({ school });
+        const { name } = await req.json()
+
+        const school = await prisma.school.update({
+            where: { id },
+            data: { name },
+        })
+
+        return NextResponse.json({ school })
+    } catch (error) {
+        console.log(error)
+
+        return NextResponse.json(
+            { message: "Failed to update school" },
+            { status: 500 }
+        )
+    }
 }
 
 export async function DELETE(
     req: Request,
-    { params }: { params: { id: string } }
+    context: { params: Promise<{ id: string }> }
 ) {
-    await prisma.school.delete({
-        where: { id: params.id },
-    });
+    try {
+        const { id } = await context.params
 
-    return NextResponse.json({ message: "Deleted" });
+        await prisma.school.delete({
+            where: { id },
+        })
+
+        return NextResponse.json({
+            message: "Deleted",
+        })
+    } catch (error) {
+        console.log(error)
+
+        return NextResponse.json(
+            { message: "Failed to delete school" },
+            { status: 500 }
+        )
+    }
 }
