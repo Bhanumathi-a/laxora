@@ -32,7 +32,7 @@ const StudentList = async ({ params }: Props) => {
         </div>
         <div className='w-[86%] md:w-[92%] lg:w-[84%] xl:w-[86%] bg-[#f7f8fa] flex flex-col'>
           <Header />
-          <StudentTable students={students} />
+          <StudentTable initialStudents={students} />
         </div>
       </div>
     </>

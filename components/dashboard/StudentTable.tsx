@@ -16,12 +16,15 @@ import IconButton from "@/components/ui/IconButton"
 import { SearchBox } from "@/components/ui/SearchBox"
 import FormModal from "../forms/FormModal"
 import StudentForm from "../forms/student/StudentForm"
+import toast from "react-hot-toast"
 
 type StudentTableProps = {
-  students: Student[]
+  initialStudents: Student[]
 }
 
-const StudentTable = ({ students: initialStudents }: StudentTableProps) => {
+const StudentTable = ({
+  initialStudents: initialStudents,
+}: StudentTableProps) => {
   const [open, setOpen] = useState(false)
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
   const [formMode, setFormMode] = useState<"create" | "edit">("create")
@@ -69,6 +72,32 @@ const StudentTable = ({ students: initialStudents }: StudentTableProps) => {
       accessor: "action",
     },
   ]
+  const handleDelete = async (id: string) => {
+    const confirmed = confirm("Are you sure you want to delete this student?")
+
+    if (!confirmed) return
+
+    try {
+      const response = await fetch(`/api/students/${id}`, {
+        method: "DELETE",
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        console.log(result.message)
+        toast.error(result.message)
+        return
+      }
+
+      toast.success("Student deleted successfully")
+
+      setStudents((prev) => prev.filter((student) => student.id !== id))
+    } catch (error) {
+      console.log(error)
+      toast.error("Failed to delete student")
+    }
+  }
   const renderRow = (item: Student) => (
     <tr
       key={item.id}
@@ -115,6 +144,7 @@ const StudentTable = ({ students: initialStudents }: StudentTableProps) => {
               icon={Trash2}
               bgColor='bg-red-200'
               iconColor='text-blue-dark'
+              onClick={() => handleDelete(item.id)}
             />
           </div>
         </td>

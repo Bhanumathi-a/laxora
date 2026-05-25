@@ -7,6 +7,7 @@ import SelectField from "../shared/SelectField"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { StudentFormData, studentSchema } from "@/lib/validations/student"
+import toast from "react-hot-toast"
 
 type StudentFormProps = {
   mode: "create" | "edit"
@@ -23,6 +24,7 @@ const StudentForm = ({
   setStudents,
 }: StudentFormProps) => {
   const [loading, setLoading] = useState(false)
+
   const onSubmit = async (data: StudentFormData) => {
     if (mode === "create") {
       const newStudent: Student = {
@@ -42,9 +44,7 @@ const StudentForm = ({
         grade: data.grade,
         image: "",
       }
-      // setStudents((prev) => [...prev, newStudent])
-      // reset()
-      // setOpen(false)
+
       const response = await fetch("/api/students", {
         method: "POST",
         headers: {
@@ -57,15 +57,43 @@ const StudentForm = ({
 
       if (!response.ok) {
         console.log(result.message)
+        toast(result.message)
         return
       }
-
+      toast.success("Student created successfully")
       setStudents((prev) => [...prev, result.student])
 
       reset()
       setOpen(false)
     }
+    if (mode === "edit" && studentData) {
+      const response = await fetch(`/api/students/${studentData.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+
+      const result = await response.json()
+
+      if (!response.ok) {
+        console.log(result.message)
+        toast(result.message)
+        return
+      }
+      toast.success("Student updated successfully")
+      setStudents((prev) =>
+        prev.map((student) =>
+          student.id === studentData.id ? result.student : student,
+        ),
+      )
+
+      reset()
+      setOpen(false)
+    }
   }
+
   const {
     register,
     handleSubmit,
@@ -73,7 +101,23 @@ const StudentForm = ({
     formState: { errors },
   } = useForm<StudentFormData>({
     resolver: zodResolver(studentSchema),
-    defaultValues: mode === "edit" ? studentData : {},
+    defaultValues:
+      mode === "edit" && studentData
+        ? {
+            firstName: studentData.firstName,
+            lastName: studentData.lastName,
+            gender: studentData.gender as "Male" | "Female" | "Other",
+            studentId: studentData.studentId,
+            email: studentData.email,
+            phone: studentData.phone,
+            address: studentData.address,
+            city: studentData.city,
+            pin: studentData.pin,
+            state: studentData.state,
+            country: studentData.country,
+            grade: studentData.grade,
+          }
+        : {},
   })
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
