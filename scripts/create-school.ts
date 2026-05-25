@@ -5,11 +5,17 @@ const prisma = new PrismaClient();
 async function main() {
     try {
         const laxora = await prisma.school.create({
-            data: { name: "Laxora Demo School" },
+            data: {
+                name: "Laxora Demo School",
+                slug: "laxora-demo-school",
+            }
         });
 
         const vidyasagar = await prisma.school.create({
-            data: { name: "Vidyasagar School" },
+            data: {
+                name: "Vidya Sagar",
+                slug: "vidya-sagar",
+            }
         });
 
         console.log(`school created: ${laxora}, ${vidyasagar}`);
