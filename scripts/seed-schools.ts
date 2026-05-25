@@ -10,8 +10,8 @@ async function main() {
             update: {},
             create: {
                 name: "Laxora Demo School",
-                slug: "laxora_demo"
-            },
+                slug: "laxora-demo-school",
+            }
         });
 
         // Vidyasagar test school
@@ -19,9 +19,9 @@ async function main() {
             where: { name: "Vidyasagar School" },
             update: {},
             create: {
-                name: "Vidyasagar School",
-                slug: "vidyasagar",
-            },
+                name: "Vidya Sagar",
+                slug: "vidya-sagar",
+            }
         });
 
         console.log("✅ Schools seeded");

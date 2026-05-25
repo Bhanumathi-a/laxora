@@ -11,13 +11,19 @@ async function main() {
         const laxora = await prisma.school.upsert({
             where: { name: "Laxora Demo School" },
             update: {},
-            create: { name: "Laxora Demo School" },
+            create: {
+                name: "Laxora Demo School",
+                slug: "laxora-demo-school",
+            }
         })
 
         const vidyasagar = await prisma.school.upsert({
             where: { name: "Vidyasagar School" },
             update: {},
-            create: { name: "Vidyasagar School" },
+            create: {
+                name: "Vidya Sagar",
+                slug: "vidya-sagar",
+            }
         })
 
         console.log("✅ Schools ready")
