@@ -12,7 +12,10 @@ export async function POST(req: Request) {
         }
 
         const school = await prisma.school.create({
-            data: { name },
+            data: {
+                name,
+                slug: name.toLowerCase().replace(/\s+/g, "-"),
+            }
         });
 
         return NextResponse.json({ school });
