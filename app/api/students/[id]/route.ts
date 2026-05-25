@@ -3,11 +3,7 @@ import { NextResponse } from "next/server"
 
 export async function PUT(
     req: Request,
-    context: {
-        params: Promise<{
-            id: string
-        }>
-    }
+    context: { params: Promise<{ id: string }> }
 ) {
     try {
         const { id } = await context.params
@@ -56,11 +52,7 @@ export async function PUT(
 
 export async function DELETE(
     req: Request,
-    context: {
-        params: Promise<{
-            id: string
-        }>
-    }
+    context: { params: Promise<{ id: string }> }
 ) {
     try {
         const { id } = await context.params
