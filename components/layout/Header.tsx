@@ -5,10 +5,11 @@ import { SearchBox } from "../ui/SearchBox"
 export const Header = () => {
   return (
     <>
-      <div className='flex justify-between items-center p-4'>
+      <div className='flex flex-col md:flex-row justify-between items-center p-4'>
         {/* Searchbar */}
-        <SearchBox />
-
+        <div className='hidden md:table-cell'>
+          <SearchBox />
+        </div>
         {/* icons and user */}
         <div className='flex items-center justify-end gap-3 w-full'>
           <div className='bg-white rounded-full w-7 h-7 flex items-center justify-center cursor-pointer relative'>

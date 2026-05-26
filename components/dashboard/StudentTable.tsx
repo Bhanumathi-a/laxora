@@ -58,14 +58,17 @@ const StudentTable = ({
     {
       header: "Grade",
       accessor: "grade",
+      className: "hidden md:table-cell",
     },
     {
       header: "Phone",
       accessor: "phone",
+      className: "hidden md:table-cell",
     },
     {
       header: "Address",
       accessor: "address",
+      className: "hidden md:table-cell",
     },
     {
       header: "Actions",
@@ -103,19 +106,21 @@ const StudentTable = ({
       key={item.id}
       className='border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-blue-lighter'>
       <td className='flex items-center gap-4 p-4'>
-        {item.image ? (
-          <Image
-            src={item.image}
-            alt={item.firstName}
-            width={40}
-            height={40}
-            className='w-10 h-10 rounded-full object-cover'
-          />
-        ) : (
-          <div className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center'>
-            <User className='w-5 h-5 text-gray-500' />
-          </div>
-        )}
+        <div className='hidden md:table-cell'>
+          {item.image ? (
+            <Image
+              src={item.image}
+              alt={item.firstName}
+              width={40}
+              height={40}
+              className='w-10 h-10 rounded-full object-cover'
+            />
+          ) : (
+            <div className='w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center'>
+              <User className='w-5 h-5 text-gray-500' />
+            </div>
+          )}
+        </div>
         <div className='flex flex-col'>
           <h3 className='font-semibold'>
             {item.firstName} {item.lastName}
@@ -123,10 +128,10 @@ const StudentTable = ({
           <p className='text-xs text-gray-500'>{item.grade}</p>
         </div>
       </td>
-      <td>{item.studentId}</td>
+      <td className='hidden md:table-cell'>{item.studentId}</td>
       <td>{item.grade}</td>
-      <td>{item.phone}</td>
-      <td>{item.address}</td>
+      <td className='hidden md:table-cell'>{item.phone}</td>
+      <td className='hidden md:table-cell'>{item.address}</td>
       {role === "ADMIN" && (
         <td>
           <div className='flex items-center gap-2'>
@@ -160,7 +165,7 @@ const StudentTable = ({
           <div className='flex flex-col md:flex-row items-center gap-4 w-full md:w-auto'>
             {/* <TableSearch /> */}
             <SearchBox />
-            <div className='flex items-center gap-4 self-end'>
+            <div className='flex items-center gap-4'>
               <IconButton
                 icon={SlidersHorizontal}
                 bgColor='bg-blue-lighter'
@@ -202,11 +207,7 @@ const StudentTable = ({
                   </div>
                 )}
               </div>
-              {/* <IconButton
-                icon={ArrowDownWideNarrow}
-                bgColor='bg-blue-lighter'
-                iconColor='text-blue-dark'
-              /> */}
+
               {role === "ADMIN" && (
                 <IconButton
                   icon={Plus}

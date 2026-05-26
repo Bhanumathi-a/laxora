@@ -27,10 +27,10 @@ const StudentList = async ({ params }: Props) => {
   return (
     <>
       <div className='h-screen flex'>
-        <div className='w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] p-4'>
+        <div className='w-16 md:w-20 lg:w-64 p-4'>
           <Sidebar role='ADMIN' slug={slug} schoolName={school.name} />
         </div>
-        <div className='w-[86%] md:w-[92%] lg:w-[84%] xl:w-[86%] bg-[#f7f8fa] flex flex-col'>
+        <div className='flex-1 overflow-auto bg-[#f7f8fa] '>
           <Header />
           <StudentTable initialStudents={students} />
         </div>
