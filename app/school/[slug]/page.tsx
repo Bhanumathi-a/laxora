@@ -30,9 +30,6 @@ export default async function SchoolDashboard({ params }: Props) {
 
   return (
     <>
-      {/* Sidebar Top Navbar 4 Stats Cards Students Table Attendance Chart
-      Announcements */}
-      {/* School slug: {slug} */}
       <div className='h-screen flex'>
         <div className='w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] p-2 lg:p-4'>
           <Sidebar role='ADMIN' slug={slug} schoolName={school.name} />

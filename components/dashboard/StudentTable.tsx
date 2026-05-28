@@ -17,14 +17,18 @@ import { SearchBox } from "@/components/ui/SearchBox"
 import FormModal from "../forms/FormModal"
 import StudentForm from "../forms/student/StudentForm"
 import toast from "react-hot-toast"
+import { useRouter } from "next/navigation"
 
 type StudentTableProps = {
   initialStudents: Student[]
+  slug: string
 }
 
 const StudentTable = ({
   initialStudents: initialStudents,
+  slug,
 }: StudentTableProps) => {
+  const router = useRouter()
   const [open, setOpen] = useState(false)
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
   const [formMode, setFormMode] = useState<"create" | "edit">("create")
@@ -104,6 +108,7 @@ const StudentTable = ({
   const renderRow = (item: Student) => (
     <tr
       key={item.id}
+      onClick={() => router.push(`/school/${slug}/students/${item.studentId}`)}
       className='border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-blue-lighter'>
       <td className='flex items-center gap-4 p-4'>
         <div className='hidden md:table-cell'>
@@ -128,8 +133,8 @@ const StudentTable = ({
           <p className='text-xs text-gray-500'>{item.grade}</p>
         </div>
       </td>
-      <td className='hidden md:table-cell'>{item.studentId}</td>
-      <td>{item.grade}</td>
+      <td>{item.studentId}</td>
+      <td className='hidden md:table-cell'>{item.grade}</td>
       <td className='hidden md:table-cell'>{item.phone}</td>
       <td className='hidden md:table-cell'>{item.address}</td>
       {role === "ADMIN" && (

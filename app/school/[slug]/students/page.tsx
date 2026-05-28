@@ -32,7 +32,7 @@ const StudentList = async ({ params }: Props) => {
         </div>
         <div className='flex-1 overflow-auto bg-[#f7f8fa] '>
           <Header />
-          <StudentTable initialStudents={students} />
+          <StudentTable slug={slug} initialStudents={students} />
         </div>
       </div>
     </>
