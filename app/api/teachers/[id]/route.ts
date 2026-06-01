@@ -28,7 +28,7 @@ export async function PUT(
                     pin: body.pin,
                     state: body.state,
                     country: body.country,
-                    grade: body.grade,
+                    subject: body.subject,
                 },
             })
 
