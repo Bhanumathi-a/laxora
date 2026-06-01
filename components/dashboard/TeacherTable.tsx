@@ -9,45 +9,45 @@ import {
   User,
 } from "lucide-react"
 import { useState } from "react"
-import { Student } from "@/types/student"
-// import { studentsData } from "@/lib/data"
+import { Teacher } from "@/types/teacher"
+// import { teachersData } from "@/lib/data"
 import Table from "@/components/ui/Table"
 import Image from "next/image"
 import IconButton from "@/components/ui/IconButton"
 import { SearchBox } from "@/components/ui/SearchBox"
 import FormModal from "../forms/FormModal"
-import StudentForm from "../forms/student/StudentForm"
+import TeacherForm from "../forms/teacher/TeacherForm"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 
-type StudentTableProps = {
-  initialStudents: Student[]
+type TeacherTableProps = {
+  initialTeachers: Teacher[]
   slug: string
 }
 
-const StudentTable = ({
-  initialStudents: initialStudents,
+const TeacherTable = ({
+  initialTeachers: initialTeachers,
   slug,
-}: StudentTableProps) => {
+}: TeacherTableProps) => {
   const router = useRouter()
   const [open, setOpen] = useState(false)
-  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null)
+  const [selectedTeacher, setSelectedTeacher] = useState<Teacher | null>(null)
   const [formMode, setFormMode] = useState<"create" | "edit">("create")
   // sort
   const [sortBy, setSortBy] = useState("")
   const [showSort, setShowSort] = useState(false)
-  // const [students, setStudents] = useState<Student[]>(studentsData)
-  const [students, setStudents] = useState<Student[]>(initialStudents)
+  // const [teachers, setTeachers] = useState<Teacher[]>(teachersData)
+  const [teachers, setTeachers] = useState<Teacher[]>(initialTeachers)
 
-  const sortedStudents = [...students].sort((a, b) => {
+  const sortedTeachers = [...teachers].sort((a, b) => {
     if (sortBy === "name") {
       return a.firstName.localeCompare(b.firstName)
     }
-    if (sortBy === "grade") {
-      return a.grade.localeCompare(b.grade)
+    if (sortBy === "subject") {
+      return a.subject.localeCompare(b.subject)
     }
-    if (sortBy === "studentId") {
-      return a.studentId.localeCompare(b.studentId)
+    if (sortBy === "teacherId") {
+      return a.teacherId.localeCompare(b.teacherId)
     }
     return 0
   })
@@ -57,12 +57,12 @@ const StudentTable = ({
       accessor: "info",
     },
     {
-      header: "Student ID",
-      accessor: "studentId",
+      header: "Teacher ID",
+      accessor: "teacherId",
     },
     {
-      header: "Grade",
-      accessor: "grade",
+      header: "Subject",
+      accessor: "subject",
       className: "hidden md:table-cell",
     },
     {
@@ -81,12 +81,12 @@ const StudentTable = ({
     },
   ]
   const handleDelete = async (id: string) => {
-    const confirmed = confirm("Are you sure you want to delete this student?")
+    const confirmed = confirm("Are you sure you want to delete this teacher?")
 
     if (!confirmed) return
 
     try {
-      const response = await fetch(`/api/students/${id}`, {
+      const response = await fetch(`/api/teachers/${id}`, {
         method: "DELETE",
       })
 
@@ -98,15 +98,15 @@ const StudentTable = ({
         return
       }
 
-      toast.success("Student deleted successfully")
+      toast.success("Teacher deleted successfully")
 
-      setStudents((prev) => prev.filter((student) => student.id !== id))
+      setTeachers((prev) => prev.filter((teacher) => teacher.id !== id))
     } catch (error) {
       console.log(error)
-      toast.error("Failed to delete student")
+      toast.error("Failed to delete teacher")
     }
   }
-  const renderRow = (item: Student) => (
+  const renderRow = (item: Teacher) => (
     <tr
       key={item.id}
       className='border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-blue-lighter'>
@@ -130,11 +130,11 @@ const StudentTable = ({
           <h3 className='font-semibold'>
             {item.firstName} {item.lastName}
           </h3>
-          <p className='text-xs text-gray-500'>{item.grade}</p>
+          <p className='text-xs text-gray-500'>{item.subject}</p>
         </div>
       </td>
-      <td>{item.studentId}</td>
-      <td className='hidden md:table-cell'>{item.grade}</td>
+      <td>{item.teacherId}</td>
+      <td className='hidden md:table-cell'>{item.subject}</td>
       <td className='hidden md:table-cell'>{item.phone}</td>
       <td className='hidden md:table-cell'>{item.address}</td>
 
@@ -145,7 +145,7 @@ const StudentTable = ({
             bgColor='bg-blue-lighter'
             iconColor='text-blue-dark'
             onClick={() =>
-              router.push(`/school/${slug}/students/${item.studentId}`)
+              router.push(`/school/${slug}/teachers/${item.teacherId}`)
             }
           />
           {role === "ADMIN" && (
@@ -156,7 +156,7 @@ const StudentTable = ({
                 iconColor='text-blue-dark'
                 onClick={() => {
                   setFormMode("edit")
-                  setSelectedStudent(item)
+                  setSelectedTeacher(item)
                   setOpen(true)
                 }}
               />
@@ -177,7 +177,7 @@ const StudentTable = ({
     <>
       <div className='h-full m-4 mt-0 bg-white p-4 rounded-md'>
         <div className='flex flex-col md:flex-row  items-center justify-between'>
-          <div className=' text-lg font-semibold my-4'>All Students</div>
+          <div className=' text-lg font-semibold my-4'>All Teachers</div>
           <div className='flex flex-col md:flex-row items-center gap-4 w-full md:w-auto'>
             {/* <TableSearch /> */}
             <SearchBox />
@@ -206,15 +206,15 @@ const StudentTable = ({
                     </button>
                     <button
                       onClick={() => {
-                        setSortBy("grade")
+                        setSortBy("subject")
                         setShowSort(false)
                       }}
                       className='block w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md'>
-                      Sort by Grade
+                      Sort by Subsubject
                     </button>
                     <button
                       onClick={() => {
-                        setSortBy("studentId")
+                        setSortBy("teacherId")
                         setShowSort(false)
                       }}
                       className='block w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md'>
@@ -231,7 +231,7 @@ const StudentTable = ({
                   iconColor='text-blue-dark'
                   onClick={() => {
                     setFormMode("create")
-                    setSelectedStudent(null)
+                    setSelectedTeacher(null)
                     setOpen(true)
                   }}
                 />
@@ -239,29 +239,29 @@ const StudentTable = ({
             </div>
           </div>
         </div>
-        {sortedStudents.length === 0 ? (
+        {sortedTeachers.length === 0 ? (
           <div className='flex items-center justify-center py-10 text-gray-500'>
-            No students found
+            No teachers found
           </div>
         ) : (
           <Table
             columns={columns}
-            data={sortedStudents}
+            data={sortedTeachers}
             renderRow={renderRow}
           />
         )}
         {/* <Pagination /> */}
       </div>
       <FormModal open={open} setOpen={setOpen}>
-        <StudentForm
+        <TeacherForm
           mode={formMode}
-          studentData={selectedStudent || undefined}
+          teacherData={selectedTeacher || undefined}
           setOpen={setOpen}
-          students={students}
-          setStudents={setStudents}
+          teachers={teachers}
+          setTeachers={setTeachers}
         />
       </FormModal>
     </>
   )
 }
-export default StudentTable
+export default TeacherTable

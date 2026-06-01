@@ -20,25 +20,25 @@ import Link from "next/link"
 type Props = {
   params: Promise<{
     slug: string
-    studentId: string
+    teacherId: string
   }>
 }
 
-const StudentDetailsPage = async ({ params }: Props) => {
-  const { studentId, slug } = await params
+const TeacherDetailsPage = async ({ params }: Props) => {
+  const { teacherId, slug } = await params
 
   const school = await prisma.school.findUnique({
     where: { slug },
   })
 
-  const student = await prisma.student.findUnique({
+  const teacher = await prisma.teacher.findUnique({
     where: {
-      studentId,
+      teacherId,
     },
   })
 
-  if (!student || !school) {
-    return <div>Student not found</div>
+  if (!teacher || !school) {
+    return <div>Teacher not found</div>
   }
 
   return (
@@ -55,10 +55,10 @@ const StudentDetailsPage = async ({ params }: Props) => {
                 <div className='flex flex-col lg:flex-row gap-4'>
                   <div className='bg-blue-light2 px-4 py-6 rounded-md flex-1 flex gap-4'>
                     <div className='w-1/3 flex items-center justify-center '>
-                      {student.image ? (
+                      {teacher.image ? (
                         <Image
-                          src={student.image}
-                          alt={student.firstName}
+                          src={teacher.image}
+                          alt={teacher.firstName}
                           height={144}
                           className='w-36 h-36 rounded-full object-cover'
                         />
@@ -70,11 +70,11 @@ const StudentDetailsPage = async ({ params }: Props) => {
                     </div>
                     <div className='w-2/3 flex flex-col justify-between gap-4'>
                       <h2 className='text-xl font-semibold'>
-                        {student.firstName} {student.lastName}
+                        {teacher.firstName} {teacher.lastName}
                       </h2>
-                      <span>Grade: {student.grade}</span>
+                      <span>Subject: {teacher.subject}</span>
                       <p className='text-sm '>
-                        <strong>Address:</strong> {student.address}
+                        <strong>Address:</strong> {teacher.address}
                       </p>
                       <div className='flex flex-col  gap-2  font-medium text-sm'>
                         <div className='flex gap-2 items-center w-full'>
@@ -87,11 +87,11 @@ const StudentDetailsPage = async ({ params }: Props) => {
                         </div>
                         <div className='flex gap-2 items-center w-full'>
                           <AtSign />
-                          <span>{student.email}</span>
+                          <span>{teacher.email}</span>
                         </div>
                         <div className='flex gap-2 items-center w-full'>
                           <Phone />
-                          <span>{student.phone}</span>
+                          <span>{teacher.phone}</span>
                         </div>
                       </div>
                     </div>
@@ -110,9 +110,9 @@ const StudentDetailsPage = async ({ params }: Props) => {
                       <BookOpen />
                       <div>
                         <h3 className='text-xl font-semibold'>
-                          {student.grade} A section
+                          {teacher.subject} A section
                         </h3>
-                        <span className='text-sm text-gray-400'>Grade</span>
+                        <span className='text-sm text-gray-400'>Subject</span>
                       </div>
                     </div>
                     <div className='bg-white p-4 rounded-md w-full flex gap-4 md:w-[46%] xl:w-[45%] 2xl:w-[48%]'>
@@ -143,19 +143,19 @@ const StudentDetailsPage = async ({ params }: Props) => {
                   <div className='text-lg font-semibold my-4'>Shortcuts</div>
                   <div className='flex  gap-4 mt-4 flex-wrap text-sm text-gray-400'>
                     <Link className='p-3 rounded-md bg-sky-50' href=''>
-                      Student&apos;s Teachers
+                      Teacher&apos;s Teachers
                     </Link>
                     <Link className='p-3 rounded-md bg-pink-100' href=''>
-                      Student Lessons
+                      Teacher Lessons
                     </Link>
                     <Link className='p-3 rounded-md bg-yellow-100' href=''>
-                      Student Results
+                      Teacher Results
                     </Link>
                     <Link className='p-3 rounded-md bg-green-100' href=''>
-                      Student Exams
+                      Teacher Exams
                     </Link>
                     <Link className='p-3 rounded-md bg-sky-50' href=''>
-                      Student Assignments
+                      Teacher Assignments
                     </Link>
                   </div>
                 </div>
@@ -171,4 +171,4 @@ const StudentDetailsPage = async ({ params }: Props) => {
   )
 }
 
-export default StudentDetailsPage
+export default TeacherDetailsPage

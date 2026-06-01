@@ -10,6 +10,7 @@ model School {
   name String @unique
   users    User[]
   students Student[]
+  teachers Teacher[]
   slug  String @unique
 }
 model User {
@@ -24,29 +25,39 @@ model User {
 }
 model Student {
   id         String @id @default(cuid())
-
   firstName  String
   lastName   String
-
   gender     String
-
   studentId  String @unique
-
   email      String
   phone      String
-
   address    String
   city       String
   pin        String
   state      String
   country    String
-
   grade      String
-
   image      String?
-
   schoolId   String
   school     School @relation(fields: [schoolId], references: [id])
+}
+model Teacher {
+  id        String @id @default(cuid())
+  teacherId String @unique
+  firstName String
+  lastName  String
+  email     String
+  phone     String
+  subject   String
+  image     String?
+  schoolId  String
+  school    School @relation(fields: [schoolId], references: [id])
+  gender   String
+  address  String
+  city     String
+  pin      String
+  state    String
+  country  String
 }
 enum Role {
   SUPER_ADMIN
