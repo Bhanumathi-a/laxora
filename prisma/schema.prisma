@@ -1,49 +1,57 @@
 generator client {
   provider = "prisma-client-js"
 }
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model School {
-  id   String @id @default(cuid())
-  name String @unique
+  id       String    @id @default(cuid())
+  name     String    @unique
   users    User[]
   students Student[]
   teachers Teacher[]
-  slug  String @unique
+  parents  Parent[]
+  slug     String    @unique
 }
+
 model User {
-  id       String @id @default(cuid())
-  name     String
-  email    String @unique
-  password String
-  role     Role
-  schoolId String
-  school   School @relation(fields: [schoolId], references: [id])
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id])
   createdAt DateTime @default(now())
 }
+
 model Student {
-  id         String @id @default(cuid())
-  firstName  String
-  lastName   String
-  gender     String
-  studentId  String @unique
-  email      String
-  phone      String
-  address    String
-  city       String
-  pin        String
-  state      String
-  country    String
-  grade      String
-  image      String?
-  schoolId   String
-  school     School @relation(fields: [schoolId], references: [id])
+  id        String  @id @default(cuid())
+  firstName String
+  lastName  String
+  gender    String
+  studentId String  @unique
+  email     String
+  phone     String
+  address   String
+  city      String
+  pin       String
+  state     String
+  country   String
+  grade     String
+  image     String?
+  schoolId  String
+  school    School  @relation(fields: [schoolId], references: [id])
+  parentId  String?
+  parent    Parent? @relation(fields: [parentId], references: [id])
 }
+
 model Teacher {
-  id        String @id @default(cuid())
-  teacherId String @unique
+  id        String  @id @default(cuid())
+  teacherId String  @unique
   firstName String
   lastName  String
   email     String
@@ -51,14 +59,30 @@ model Teacher {
   subject   String
   image     String?
   schoolId  String
-  school    School @relation(fields: [schoolId], references: [id])
-  gender   String
-  address  String
+  school    School  @relation(fields: [schoolId], references: [id])
+  gender    String
+  address   String
+  city      String
+  pin       String
+  state     String
+  country   String
+}
+
+model Parent {
+  id       String    @id @default(cuid())
+  name     String
+  phone    String
+  address  String?
   city     String
   pin      String
   state    String
   country  String
+  schoolId String
+  school   School    @relation(fields: [schoolId], references: [id])
+  students Student[]
+   student   String  
 }
+
 enum Role {
   SUPER_ADMIN
   ADMIN

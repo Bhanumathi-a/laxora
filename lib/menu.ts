@@ -23,6 +23,11 @@ export const schoolAdminMenu = [
         icon: Users,
     },
     {
+        label: "Parents",
+        href: "/parents",
+        icon: Users,
+    },
+    {
         label: "Attendance",
         href: "/attendance",
         icon: Building2,
