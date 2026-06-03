@@ -9,77 +9,75 @@ import {
   User,
 } from "lucide-react"
 import { useState } from "react"
-import { Parent } from "@/types/parent"
-// import { parentsData } from "@/lib/data"
+import { SchoolClass } from "@/types/schoolClass"
+// import { schoolClassData } from "@/lib/data"
 import Table from "@/components/ui/Table"
 import Image from "next/image"
 import IconButton from "@/components/ui/IconButton"
 import { SearchBox } from "@/components/ui/SearchBox"
 import FormModal from "../forms/FormModal"
-import ParentForm from "../forms/parent/ParentForm"
+import SchoolClassForm from "../forms/schoolClass/schoolClassForm"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
 
-type ParentTableProps = {
-  initialParents: Parent[]
+type SchoolClassTableProps = {
+  initialschoolClass: SchoolClass[]
   slug: string
 }
 
-const ParentTable = ({
-  initialParents: initialParents,
+const SchoolClassTable = ({
+  initialschoolClass: initialschoolClass,
   slug,
-}: ParentTableProps) => {
+}: SchoolClassTableProps) => {
   const router = useRouter()
   const [open, setOpen] = useState(false)
-  const [selectedParent, setSelectedParent] = useState<Parent | null>(null)
+  const [selectedSchoolClass, setSelectedSchoolClass] =
+    useState<SchoolClass | null>(null)
   const [formMode, setFormMode] = useState<"create" | "edit">("create")
   // sort
   const [sortBy, setSortBy] = useState("")
   const [showSort, setShowSort] = useState(false)
-  // const [parents, setParents] = useState<Parent[]>(parentsData)
-  const [parents, setParents] = useState<Parent[]>(initialParents)
+  // const [schoolClass, setschoolClass] = useState<SchoolClass[]>(schoolClassData)
+  const [schoolClass, setschoolClass] =
+    useState<SchoolClass[]>(initialschoolClass)
 
-  const sortedParents = [...parents].sort((a, b) => {
+  const sortedschoolClass = [...schoolClass].sort((a, b) => {
     if (sortBy === "name") {
       return a.name.localeCompare(b.name)
     }
-    if (sortBy === "student") {
-      return a.student.localeCompare(b.student)
-    }
+    // if (sortBy === "student") {
+    //   return a.student.localeCompare(b.student)
+    // }
     return 0
   })
   const columns = [
     {
-      header: "Parent Name",
+      header: "SchoolClass Name",
       accessor: "name",
     },
 
     {
-      header: "Student",
-      accessor: "student",
+      header: "Section",
+      accessor: "section",
     },
     {
-      header: "Phone",
-      accessor: "phone",
+      header: "capacity",
+      accessor: "capacity",
       className: "hidden md:table-cell",
     },
-    {
-      header: "Address",
-      accessor: "address",
-      className: "hidden md:table-cell",
-    },
+
     {
       header: "Actions",
       accessor: "action",
     },
   ]
   const handleDelete = async (id: string) => {
-    const confirmed = confirm("Are you sure you want to delete this parent?")
+    const confirmed = confirm("Are you sure you want to delete this Class?")
 
     if (!confirmed) return
 
     try {
-      const response = await fetch(`/api/parents/${id}`, {
+      const response = await fetch(`/api/schoolClass/${id}`, {
         method: "DELETE",
       })
 
@@ -91,15 +89,17 @@ const ParentTable = ({
         return
       }
 
-      toast.success("Parent deleted successfully")
+      toast.success("Class deleted successfully")
 
-      setParents((prev) => prev.filter((parent) => parent.id !== id))
+      setschoolClass((prev) =>
+        prev.filter((schoolClass) => schoolClass.id !== id),
+      )
     } catch (error) {
       console.log(error)
-      toast.error("Failed to delete parent")
+      toast.error("Failed to delete Class")
     }
   }
-  const renderRow = (item: Parent) => (
+  const renderRow = (item: SchoolClass) => (
     <tr
       key={item.id}
       className='border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-blue-lighter'>
@@ -109,19 +109,18 @@ const ParentTable = ({
         </div>
       </td>
       <td>
-        <p className='text-xs text-gray-500'>{item.student}</p>
+        <p className='text-xs text-gray-500'>{item.section}</p>
       </td>
-
-      <td className='hidden md:table-cell'>{item.phone}</td>
-      <td className='hidden md:table-cell'>{item.address}</td>
-
+      <td className='hidden md:table-cell'>{item.capacity}</td>
       <td>
         <div className='flex items-center gap-2'>
           <IconButton
             icon={Eye}
             bgColor='bg-blue-lighter'
             iconColor='text-blue-dark'
-            onClick={() => router.push(`/school/${slug}/parents/${item.id}`)}
+            onClick={() =>
+              router.push(`/school/${slug}/schoolClass/${item.id}`)
+            }
           />
           {role === "ADMIN" && (
             <>
@@ -131,7 +130,7 @@ const ParentTable = ({
                 iconColor='text-blue-dark'
                 onClick={() => {
                   setFormMode("edit")
-                  setSelectedParent(item)
+                  setSelectedSchoolClass(item)
                   setOpen(true)
                 }}
               />
@@ -152,7 +151,7 @@ const ParentTable = ({
     <>
       <div className='h-full m-4 mt-0 bg-white p-4 rounded-md'>
         <div className='flex flex-col md:flex-row  items-center justify-between'>
-          <div className=' text-lg font-semibold my-4'>All Parents</div>
+          <div className=' text-lg font-semibold my-4'>All schoolClass</div>
           <div className='flex flex-col md:flex-row items-center gap-4 w-full md:w-auto'>
             {/* <TableSearch /> */}
             <SearchBox />
@@ -189,7 +188,7 @@ const ParentTable = ({
                     </button>
                     <button
                       onClick={() => {
-                        setSortBy("parentId")
+                        setSortBy("schoolClassId")
                         setShowSort(false)
                       }}
                       className='block w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md'>
@@ -206,7 +205,7 @@ const ParentTable = ({
                   iconColor='text-blue-dark'
                   onClick={() => {
                     setFormMode("create")
-                    setSelectedParent(null)
+                    setSelectedSchoolClass(null)
                     setOpen(true)
                   }}
                 />
@@ -214,25 +213,29 @@ const ParentTable = ({
             </div>
           </div>
         </div>
-        {sortedParents.length === 0 ? (
+        {sortedschoolClass.length === 0 ? (
           <div className='flex items-center justify-center py-10 text-gray-500'>
-            No parents found
+            No Classs found
           </div>
         ) : (
-          <Table columns={columns} data={sortedParents} renderRow={renderRow} />
+          <Table
+            columns={columns}
+            data={sortedschoolClass}
+            renderRow={renderRow}
+          />
         )}
         {/* <Pagination /> */}
       </div>
       <FormModal open={open} setOpen={setOpen}>
-        <ParentForm
+        <SchoolClassForm
           mode={formMode}
-          parentData={selectedParent || undefined}
+          schoolClassData={selectedSchoolClass || undefined}
           setOpen={setOpen}
-          parents={parents}
-          setParents={setParents}
+          schoolClass={schoolClass}
+          setschoolClass={setschoolClass}
         />
       </FormModal>
     </>
   )
 }
-export default ParentTable
+export default SchoolClassTable

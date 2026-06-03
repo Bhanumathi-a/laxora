@@ -2,6 +2,8 @@ import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "react-hot-toast"
+import { ThemeProvider } from "@/components/providers/ThemeProvider"
+import ThemeSwitcher from "@/components/ui/ThemeSwitcher"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,16 +27,22 @@ export default function RootLayout({
 }>) {
   return (
     <html
+      suppressHydrationWarning
       lang='en'
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased bg-white dark:bg-black`}>
+      className={` h-full antialiased bg-[var(--background)]`}>
       <body className='min-h-full flex flex-col'>
-        {children}
-        <Toaster
-          position='top-right'
-          toastOptions={{
-            duration: 3000,
-          }}
-        />
+        <ThemeProvider>
+          {children}
+          <Toaster
+            position='top-right'
+            toastOptions={{
+              duration: 3000,
+            }}
+          />
+          <div className='fixed bottom-15 left-4 z-50'>
+            <ThemeSwitcher />
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   )

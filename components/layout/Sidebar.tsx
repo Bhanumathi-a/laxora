@@ -12,10 +12,15 @@ export default function Sidebar({ role, slug, schoolName }: SidebarProps) {
 
   const title = role === "SUPER_ADMIN" ? "Laxora" : schoolName || "School"
 
+  const titleLogo = title.toUpperCase().slice(0, 1)
+
   return (
     <aside className='w-64 border-r min-h-screen'>
       <div className=' flex items-center justify-start mb-2'>
-        <span>logo</span>
+        {/* <span>logo</span> */}
+        <strong className='font-bold text-2xl mr-3 lg:hidden'>
+          {titleLogo}
+        </strong>
         <span className='hidden lg:block font-light my-4'>{title}</span>
       </div>
       <nav className='space-y-2'>

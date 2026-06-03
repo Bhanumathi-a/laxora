@@ -3,7 +3,18 @@
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0d2440;
+
+  --card: #ffffff;
+  --sidebar: #f7f8fa;
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #f8fafc;
+
+  --card: #1e293b;
+  --sidebar: #172033;
 }
 
 @theme inline {
@@ -133,10 +144,3 @@ body {
   color: gray !important;
   margin-bottom: 5px;
 }
-
-/* .react-calendar__tile--active,
-.react-calendar__tile--active:enabled:hover,
-.react-calendar__tile--active:enabled:focus {
-  background-color: "#000" !important;
-  color: #000 !important;
-} */

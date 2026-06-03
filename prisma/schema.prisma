@@ -14,6 +14,7 @@ model School {
   students Student[]
   teachers Teacher[]
   parents  Parent[]
+  classes  Class[]
   slug     String    @unique
 }
 
@@ -80,7 +81,18 @@ model Parent {
   schoolId String
   school   School    @relation(fields: [schoolId], references: [id])
   students Student[]
-   student   String  
+  student  String
+}
+
+model Class {
+  id       String @id @default(cuid())
+  name     String
+  section  String
+  capacity Int?
+  schoolId String
+  school   School @relation(fields: [schoolId], references: [id])
+
+  @@unique([schoolId, name, section])
 }
 
 enum Role {

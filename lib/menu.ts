@@ -4,12 +4,13 @@ import {
     Building2,
     Users,
     GraduationCap,
+    Landmark,
 } from "lucide-react"
 
 export const schoolAdminMenu = [
     {
         label: "Dashboard",
-        href: "/school-dashboard",
+        href: "/",
         icon: LayoutDashboard,
     },
     {
@@ -28,6 +29,11 @@ export const schoolAdminMenu = [
         icon: Users,
     },
     {
+        label: "Classes",
+        href: "/schoolClass",
+        icon: Landmark
+    },
+    {
         label: "Attendance",
         href: "/attendance",
         icon: Building2,
@@ -35,7 +41,7 @@ export const schoolAdminMenu = [
 ]
 
 export const superAdminMenu = [
-    { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { label: "Dashboard", href: "/", icon: LayoutDashboard },
     { label: "Schools", href: "/schools", icon: Building2 },
     { label: "Subscription", href: "/subscription" },
     { label: "Reports", href: "/reports" },
