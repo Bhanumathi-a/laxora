@@ -10,8 +10,8 @@ export async function PUT(
 
         const body = await req.json()
 
-        const updatedParent =
-            await prisma.parent.update({
+        const updatedSchoolClass =
+            await prisma.class.update({
                 where: {
                     id,
                 },
@@ -29,15 +29,15 @@ export async function PUT(
             })
 
         return NextResponse.json({
-            message: "Parent updated",
-            parent: updatedParent,
+            message: "Class updated",
+            schoolClass: updatedSchoolClass,
         })
     } catch (error) {
         console.log(error)
 
         return NextResponse.json(
             {
-                message: "Failed to update parent",
+                message: "Failed to update Class",
             },
             {
                 status: 500,
@@ -53,21 +53,21 @@ export async function DELETE(
     try {
         const { id } = await context.params
 
-        await prisma.parent.delete({
+        await prisma.class.delete({
             where: {
                 id,
             },
         })
 
         return NextResponse.json({
-            message: "Parent deleted",
+            message: "SchoolClass deleted",
         })
     } catch (error) {
         console.log(error)
 
         return NextResponse.json(
             {
-                message: "Failed to delete parent",
+                message: "Failed to delete schoolClass",
             },
             {
                 status: 500,

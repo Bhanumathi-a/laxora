@@ -63,14 +63,15 @@ export default function Login() {
         </div>
         <div className='flex-1 bg-blue-light2 text-center hidden lg:flex'>
           <div className='w-[500px] m-auto'>
-            <Image
+            Laxora
+            {/* <Image
               src='/laxora_logo.png'
               width={1024}
               height={299}
               alt='Laxora'
               className='w-full h-auto'
               loading='eager'
-            />
+            /> */}
           </div>
         </div>
       </div>

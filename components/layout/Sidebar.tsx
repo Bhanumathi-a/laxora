@@ -23,6 +23,7 @@ export default function Sidebar({ role, slug, schoolName }: SidebarProps) {
         </strong>
         <span className='hidden lg:block font-light my-4'>{title}</span>
       </div>
+
       <nav className='space-y-2'>
         {menu.map((item) => (
           <Link
@@ -30,7 +31,7 @@ export default function Sidebar({ role, slug, schoolName }: SidebarProps) {
             href={
               role === "SUPER_ADMIN" ? item.href : `/school/${slug}${item.href}`
             }
-            className='flex items-center justify-start lg:justify-start gap-4 text-brand  hover:text-blue-light'>
+            className='flex items-center justify-start lg:justify-start gap-4 text-brand dark:text-blue-light  hover:text-blue-light'>
             <span className='w-8 h-8 flex items-center justify-center rounded-full p-2 cursor-pointer bg-blue-lighter'>
               {item.icon && <item.icon size={18} />}
             </span>

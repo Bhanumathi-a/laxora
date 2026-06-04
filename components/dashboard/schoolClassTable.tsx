@@ -52,7 +52,7 @@ const SchoolClassTable = ({
   })
   const columns = [
     {
-      header: "SchoolClass Name",
+      header: "Class Name",
       accessor: "name",
     },
 
@@ -151,7 +151,7 @@ const SchoolClassTable = ({
     <>
       <div className='h-full m-4 mt-0 bg-white p-4 rounded-md'>
         <div className='flex flex-col md:flex-row  items-center justify-between'>
-          <div className=' text-lg font-semibold my-4'>All schoolClass</div>
+          <div className=' text-lg font-semibold my-4'>All Classes</div>
           <div className='flex flex-col md:flex-row items-center gap-4 w-full md:w-auto'>
             {/* <TableSearch /> */}
             <SearchBox />
