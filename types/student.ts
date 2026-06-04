@@ -17,9 +17,16 @@ export type Student = {
     state: string
     country: string
 
-    grade: string
+    classId: string | null
 
     image: string | null
 
     schoolId: string
+    class?: {
+        id: string
+        name: string
+        section: string
+        schoolId: string
+        capacity: number | null
+    } | null
 }

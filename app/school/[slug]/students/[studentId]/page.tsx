@@ -35,6 +35,9 @@ const StudentDetailsPage = async ({ params }: Props) => {
     where: {
       studentId,
     },
+    include: {
+      class: true,
+    },
   })
 
   if (!student || !school) {
@@ -72,7 +75,9 @@ const StudentDetailsPage = async ({ params }: Props) => {
                       <h2 className='text-xl font-semibold'>
                         {student.firstName} {student.lastName}
                       </h2>
-                      <span>Grade: {student.grade}</span>
+                      <span>
+                        Class: {student.class?.name} - {student.class?.section}
+                      </span>
                       <p className='text-sm '>
                         <strong>Address:</strong> {student.address}
                       </p>
@@ -110,9 +115,9 @@ const StudentDetailsPage = async ({ params }: Props) => {
                       <BookOpen />
                       <div>
                         <h3 className='text-xl font-semibold'>
-                          {student.grade} A section
+                          {student.class?.name} - {student.class?.section}
                         </h3>
-                        <span className='text-sm text-gray-400'>Grade</span>
+                        <span className='text-sm text-gray-400'>Class</span>
                       </div>
                     </div>
                     <div className='bg-white p-4 rounded-md w-full flex gap-4 md:w-[46%] xl:w-[45%] 2xl:w-[48%]'>

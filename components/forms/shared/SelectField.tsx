@@ -1,9 +1,14 @@
 import { UseFormRegisterReturn } from "react-hook-form"
 
+type SelectOption = {
+  label: string
+  value: string
+}
+
 type SelectFieldProps = {
   label: string
   name: string
-  options: string[]
+  options: SelectOption[]
   register?: UseFormRegisterReturn
 }
 
@@ -21,8 +26,8 @@ const SelectField = ({ label, name, options, register }: SelectFieldProps) => {
         <option value=''>Select {label}</option>
 
         {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
+          <option key={option.value} value={option.value}>
+            {option.label}
           </option>
         ))}
       </select>

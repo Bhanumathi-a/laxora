@@ -13,7 +13,7 @@ type StudentInput = {
     pin: string
     state: string
     country: string
-    grade: string
+    classId: string
     image?: string
 }
 export async function POST(req: Request) {
@@ -31,10 +31,10 @@ export async function POST(req: Request) {
             pin,
             state,
             country,
-            grade,
+            classId,
             image,
         } = body
-        if (!firstName || !studentId || !grade) {
+        if (!firstName || !studentId || !classId) {
             return NextResponse.json(
                 { message: "Missing required fields" },
                 { status: 400 }
@@ -47,6 +47,7 @@ export async function POST(req: Request) {
                 { status: 400 }
             );
         }
+        console.log("classId received:", classId)
         const student = await prisma.student.create({
             data: {
                 firstName,
@@ -60,7 +61,7 @@ export async function POST(req: Request) {
                 pin,
                 state,
                 country,
-                grade,
+                classId,
                 image: image || "",
                 schoolId: school.id,
             },

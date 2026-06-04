@@ -19,14 +19,17 @@ import FormModal from "../forms/FormModal"
 import StudentForm from "../forms/student/StudentForm"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
+import { SchoolClass } from "@/types/schoolClass"
 
 type StudentTableProps = {
   initialStudents: Student[]
+  schoolClasses: SchoolClass[]
   slug: string
 }
 
 const StudentTable = ({
   initialStudents: initialStudents,
+  schoolClasses,
   slug,
 }: StudentTableProps) => {
   const router = useRouter()
@@ -43,8 +46,10 @@ const StudentTable = ({
     if (sortBy === "name") {
       return a.firstName.localeCompare(b.firstName)
     }
-    if (sortBy === "grade") {
-      return a.grade.localeCompare(b.grade)
+    if (sortBy === "class") {
+      return `${a.class?.name ?? ""}-${a.class?.section ?? ""}`.localeCompare(
+        `${b.class?.name ?? ""}-${b.class?.section ?? ""}`,
+      )
     }
     if (sortBy === "studentId") {
       return a.studentId.localeCompare(b.studentId)
@@ -61,8 +66,8 @@ const StudentTable = ({
       accessor: "studentId",
     },
     {
-      header: "Grade",
-      accessor: "grade",
+      header: "class",
+      accessor: "class",
       className: "hidden md:table-cell",
     },
     {
@@ -130,13 +135,15 @@ const StudentTable = ({
           <h3 className='font-semibold'>
             {item.firstName} {item.lastName}
           </h3>
-          <p className='text-xs text-gray-500'>{item.grade}</p>
+          {/* <p className='text-xs text-gray-500'>{item.classId}</p> */}
         </div>
       </td>
       <td>{item.studentId}</td>
-      <td className='hidden md:table-cell'>{item.grade}</td>
+      <td className='hidden md:table-cell'>
+        {item.class?.name} - {item.class?.section}
+      </td>
       <td className='hidden md:table-cell'>{item.phone}</td>
-      <td className='hidden md:table-cell'>{item.address}</td>
+      <td className='hidden md:table-cell break-normal w-80'>{item.address}</td>
 
       <td>
         <div className='flex items-center gap-2'>
@@ -175,7 +182,7 @@ const StudentTable = ({
   const role = "ADMIN"
   return (
     <>
-      <div className='h-full m-4 mt-0 bg-white p-4 rounded-md'>
+      <div className='h-full m-4 mt-0 bg-white p-4 rounded-md  dark:bg-brand '>
         <div className='flex flex-col md:flex-row  items-center justify-between'>
           <div className=' text-lg font-semibold my-4'>All Students</div>
           <div className='flex flex-col md:flex-row items-center gap-4 w-full md:w-auto'>
@@ -206,11 +213,11 @@ const StudentTable = ({
                     </button>
                     <button
                       onClick={() => {
-                        setSortBy("grade")
+                        setSortBy("classId")
                         setShowSort(false)
                       }}
                       className='block w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md'>
-                      Sort by Grade
+                      Sort by classId
                     </button>
                     <button
                       onClick={() => {
@@ -259,6 +266,7 @@ const StudentTable = ({
           setOpen={setOpen}
           students={students}
           setStudents={setStudents}
+          SchoolClasses={schoolClasses}
         />
       </FormModal>
     </>

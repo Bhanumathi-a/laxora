@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { StudentFormData, studentSchema } from "@/lib/validations/student"
 import toast from "react-hot-toast"
+import { SchoolClass } from "@/types/schoolClass"
 
 type StudentFormProps = {
   mode: "create" | "edit"
@@ -15,6 +16,7 @@ type StudentFormProps = {
   setOpen: (open: boolean) => void
   students: Student[]
   setStudents: React.Dispatch<React.SetStateAction<Student[]>>
+  SchoolClasses: SchoolClass[]
 }
 const StudentForm = ({
   mode,
@@ -22,6 +24,7 @@ const StudentForm = ({
   setOpen,
   students,
   setStudents,
+  SchoolClasses,
 }: StudentFormProps) => {
   const [loading, setLoading] = useState(false)
 
@@ -41,7 +44,7 @@ const StudentForm = ({
         pin: data.pin,
         state: data.state,
         country: data.country,
-        grade: data.grade,
+        classId: data.classId,
         image: "",
       }
 
@@ -115,7 +118,7 @@ const StudentForm = ({
             pin: studentData.pin,
             state: studentData.state,
             country: studentData.country,
-            grade: studentData.grade,
+            classId: studentData.classId ?? "",
           }
         : {},
   })
@@ -149,7 +152,11 @@ const StudentForm = ({
               <SelectField
                 label='Gender'
                 name='gender'
-                options={["Male", "Female", "Other"]}
+                options={[
+                  { label: "Male", value: "Male" },
+                  { label: "Female", value: "Female" },
+                  { label: "Other", value: "Other" },
+                ]}
                 register={register("gender")}
               />
               {errors.gender && (
@@ -209,16 +216,16 @@ const StudentForm = ({
           <h2 className='text-base/7 font-semibold text-gray-900 mt-10'>
             Academic Details
           </h2>
-          <div className='mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
-            <div className='sm:col-span-3'>
-              <InputField label='Grade' {...register("grade")} />
-              {errors.grade && (
-                <p className='text-red-400'>{errors.grade.message}</p>
-              )}
-            </div>
-            {/* <div className='sm:col-span-3'>
-              <InputField label='Previous Grade' name='prevGrade' />
-            </div> */}
+          <div className='sm:col-span-3'>
+            <SelectField
+              label='Class'
+              name='classId'
+              options={SchoolClasses.map((schoolClass) => ({
+                label: `${schoolClass.name} - ${schoolClass.section}`,
+                value: schoolClass.id,
+              }))}
+              register={register("classId")}
+            />
           </div>
         </div>
       </div>

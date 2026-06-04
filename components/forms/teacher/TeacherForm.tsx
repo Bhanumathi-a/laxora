@@ -149,7 +149,11 @@ const TeacherForm = ({
               <SelectField
                 label='Gender'
                 name='gender'
-                options={["Male", "Female", "Other"]}
+                options={[
+                  { label: "Male", value: "Male" },
+                  { label: "Female", value: "Female" },
+                  { label: "Other", value: "Other" },
+                ]}
                 register={register("gender")}
               />
               {errors.gender && (
