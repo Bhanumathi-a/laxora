@@ -18,13 +18,10 @@ export async function PUT(
 
                 data: {
                     name: body.name,
-                    phone: body.phone,
-                    address: body.address,
-                    city: body.city,
-                    pin: body.pin,
-                    state: body.state,
-                    country: body.country,
-                    students: body.students,
+                    capacity: body.capacity,
+                    section: body.section,
+                    schoolId: body.schoolId
+
                 },
             })
 
