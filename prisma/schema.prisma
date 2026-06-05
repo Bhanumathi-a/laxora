@@ -15,6 +15,7 @@ model School {
   teachers Teacher[]
   parents  Parent[]
   classes  Class[]
+  subjects Subject[]
   slug     String    @unique
 }
 
@@ -52,8 +53,8 @@ model Student {
 }
 
 model Teacher {
-  id        String  @id @default(cuid())
-  teacherId String  @unique
+  id        String    @id @default(cuid())
+  teacherId String    @unique
   firstName String
   lastName  String
   email     String
@@ -61,13 +62,14 @@ model Teacher {
   subject   String
   image     String?
   schoolId  String
-  school    School  @relation(fields: [schoolId], references: [id])
+  school    School    @relation(fields: [schoolId], references: [id])
   gender    String
   address   String
   city      String
   pin       String
   state     String
   country   String
+  subjects  Subject[]
 }
 
 model Parent {
@@ -95,6 +97,17 @@ model Class {
   students Student[]
 
   @@unique([schoolId, name, section])
+}
+
+model Subject {
+  id   String @id @default(cuid())
+  name String
+
+  schoolId String
+  school   School @relation(fields: [schoolId], references: [id])
+
+  teacherId String?
+  teacher   Teacher? @relation(fields: [teacherId], references: [id])
 }
 
 enum Role {

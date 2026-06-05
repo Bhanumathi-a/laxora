@@ -110,7 +110,7 @@ const TeacherDetailsPage = async ({ params }: Props) => {
                       <BookOpen />
                       <div>
                         <h3 className='text-xl font-semibold'>
-                          {teacher.subject} A section
+                          {teacher.subject}
                         </h3>
                         <span className='text-sm text-gray-400'>Subject</span>
                       </div>
@@ -118,7 +118,7 @@ const TeacherDetailsPage = async ({ params }: Props) => {
                     <div className='bg-white p-4 rounded-md w-full flex gap-4 md:w-[46%] xl:w-[45%] 2xl:w-[48%]'>
                       <ChartNoAxesCombined />
                       <div>
-                        <h3 className='text-xl font-semibold'>Pass</h3>
+                        <h3 className='text-xl font-semibold'>98%</h3>
                         <span className='text-sm text-gray-400'>
                           Result of last test/exam
                         </span>
@@ -128,7 +128,7 @@ const TeacherDetailsPage = async ({ params }: Props) => {
                       <ChartNoAxesCombined />
                       <div>
                         <h3 className='text-xl font-semibold'>6A</h3>
-                        <span className='text-sm text-gray-400'>Classes</span>
+                        <span className='text-sm text-gray-400'>Class</span>
                       </div>
                     </div>
                   </div>
@@ -143,7 +143,7 @@ const TeacherDetailsPage = async ({ params }: Props) => {
                   <div className='text-lg font-semibold my-4'>Shortcuts</div>
                   <div className='flex  gap-4 mt-4 flex-wrap text-sm text-gray-400'>
                     <Link className='p-3 rounded-md bg-sky-50' href=''>
-                      Teacher&apos;s Teachers
+                      Teacher&apos;s Student
                     </Link>
                     <Link className='p-3 rounded-md bg-pink-100' href=''>
                       Teacher Lessons

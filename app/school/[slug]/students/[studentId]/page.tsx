@@ -11,6 +11,7 @@ import {
   CalendarDays,
   ChartNoAxesCombined,
   Droplet,
+  IndianRupee,
   Phone,
   User,
 } from "lucide-react"
@@ -130,10 +131,10 @@ const StudentDetailsPage = async ({ params }: Props) => {
                       </div>
                     </div>
                     <div className='bg-white p-4 rounded-md w-full flex gap-4 md:w-[46%] xl:w-[45%] 2xl:w-[48%]'>
-                      <ChartNoAxesCombined />
+                      <IndianRupee />
                       <div>
-                        <h3 className='text-xl font-semibold'>6A</h3>
-                        <span className='text-sm text-gray-400'>Classes</span>
+                        <h3 className='text-xl font-semibold'>Fees</h3>
+                        <span className='text-sm text-gray-400'>Clear</span>
                       </div>
                     </div>
                   </div>

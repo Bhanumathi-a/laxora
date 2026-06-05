@@ -4,7 +4,7 @@ import {
     Building2,
     Users,
     GraduationCap,
-    Landmark,
+    Landmark, FlaskConical, UsersRound
 } from "lucide-react"
 
 export const schoolAdminMenu = [
@@ -26,12 +26,17 @@ export const schoolAdminMenu = [
     {
         label: "Parents",
         href: "/parents",
-        icon: Users,
+        icon: UsersRound
     },
     {
         label: "Classes",
         href: "/schoolClass",
         icon: Landmark
+    },
+    {
+        label: "Subjects",
+        href: "/subject",
+        icon: FlaskConical
     },
     {
         label: "Attendance",
