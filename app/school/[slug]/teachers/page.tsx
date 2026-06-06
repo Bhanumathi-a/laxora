@@ -30,7 +30,7 @@ const TeacherList = async ({ params }: Props) => {
         <div className='w-16 md:w-20 lg:w-64 p-4'>
           <Sidebar role='ADMIN' slug={slug} schoolName={school.name} />
         </div>
-        <div className='flex-1 overflow-auto bg-[#f7f8fa] '>
+        <div className='flex-1 overflow-auto bg-[#f7f8fa]  dark:bg-[#1e293b] '>
           <Header />
           <TeacherTable slug={slug} initialTeachers={teachers} />
         </div>
