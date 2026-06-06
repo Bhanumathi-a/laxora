@@ -50,6 +50,7 @@ model Student {
   parent    Parent? @relation(fields: [parentId], references: [id])
   classId   String
   class     Class   @relation(fields: [classId], references: [id])
+  password  String
 }
 
 model Teacher {

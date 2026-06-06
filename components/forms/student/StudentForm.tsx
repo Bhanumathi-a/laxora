@@ -46,6 +46,7 @@ const StudentForm = ({
         country: data.country,
         classId: data.classId,
         image: "",
+        password: data.password,
       }
 
       const response = await fetch("/api/students", {
@@ -119,6 +120,7 @@ const StudentForm = ({
             state: studentData.state,
             country: studentData.country,
             classId: studentData.classId ?? "",
+            password: studentData.password,
           }
         : {},
   })
@@ -163,6 +165,31 @@ const StudentForm = ({
                 <p className='text-red-400'>{errors.gender.message}</p>
               )}
             </div>
+            {mode === "create" && (
+              <>
+                <div className='sm:col-span-3'>
+                  <InputField
+                    label='Password'
+                    {...register("password")}
+                    type='password'
+                  />
+                  {errors.password && (
+                    <p className='text-red-400'>{errors.password.message}</p>
+                  )}
+                </div>
+                <div className='sm:col-span-3'>
+                  <InputField
+                    label='Confirm Password'
+                    {...register("password")}
+                    type='password'
+                  />
+                  {errors.password && (
+                    <p className='text-red-400'>{errors.password.message}</p>
+                  )}
+                </div>
+              </>
+            )}
+
             <div className='sm:col-span-3'>
               <InputField
                 label='Email Address'
@@ -179,6 +206,7 @@ const StudentForm = ({
                 <p className='text-red-400'>{errors.phone.message}</p>
               )}
             </div>
+
             <div className='col-span-full'>
               <ImageUpload />
             </div>

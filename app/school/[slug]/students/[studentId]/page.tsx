@@ -76,10 +76,13 @@ const StudentDetailsPage = async ({ params }: Props) => {
                       <h2 className='text-xl font-semibold'>
                         {student.firstName} {student.lastName}
                       </h2>
-                      <span>
-                        Class: {student.class?.name} - {student.class?.section}
-                      </span>
+
                       <p className='text-sm '>
+                        <strong>ID:</strong> {student.studentId}
+                        <br />
+                        <strong> Class:</strong> {student.class?.name} -{" "}
+                        {student.class?.section}
+                        <br />
                         <strong>Address:</strong> {student.address}
                       </p>
                       <div className='flex flex-col  gap-2  font-medium text-sm'>

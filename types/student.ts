@@ -22,6 +22,7 @@ export type Student = {
     image: string | null
 
     schoolId: string
+    password: string
     class?: {
         id: string
         name: string

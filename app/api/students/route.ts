@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
+import bcrypt from "bcrypt"
+
 const prisma = new PrismaClient();
 type StudentInput = {
     firstName: string
@@ -15,6 +17,7 @@ type StudentInput = {
     country: string
     classId: string
     image?: string
+    password: string
 }
 export async function POST(req: Request) {
     try {
@@ -33,6 +36,7 @@ export async function POST(req: Request) {
             country,
             classId,
             image,
+            password
         } = body
         if (!firstName || !studentId || !classId) {
             return NextResponse.json(
@@ -48,6 +52,7 @@ export async function POST(req: Request) {
             );
         }
         console.log("classId received:", classId)
+        const hashedPassword = await bcrypt.hash(password, 10)
         const student = await prisma.student.create({
             data: {
                 firstName,
@@ -64,6 +69,7 @@ export async function POST(req: Request) {
                 classId,
                 image: image || "",
                 schoolId: school.id,
+                password: hashedPassword
             },
         });
         return NextResponse.json({
