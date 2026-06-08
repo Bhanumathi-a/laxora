@@ -16,13 +16,13 @@ export default function ThemeSwitcher() {
 
   return (
     <div className='flex items-center rounded-full bg-gray-100 p-1'>
-      <button
+      {/* <button
         onClick={() => setTheme("system")}
         className={`p-2 rounded-full text-brand ${
           theme === "system" ? "bg-white shadow" : ""
         }`}>
         <Monitor size={18} />
-      </button>
+      </button> */}
 
       <button
         onClick={() => setTheme("light")}

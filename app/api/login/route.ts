@@ -1,70 +1,111 @@
-import { PrismaClient } from "@prisma/client";
-import * as bcrypt from "bcrypt";
-import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { PrismaClient } from "@prisma/client"
+import * as bcrypt from "bcrypt"
+import { NextResponse } from "next/server"
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 export async function POST(req: Request) {
     try {
-        const { email, password } = await req.json();
-        if (!email || !password) {
+        const { loginId, password } = await req.json()
+
+        if (!loginId || !password) {
             return NextResponse.json(
                 { message: "Email and password required" },
                 { status: 400 }
-            );
+            )
         }
 
-        // 1. Check user
-
+        // ===== USER / ADMIN LOGIN =====
         const user = await prisma.user.findUnique({
-            where: { email },
+            where: {
+                email: loginId,
+            },
             include: {
                 school: true,
             },
         })
 
-        if (!user) {
+        if (user) {
+            const isMatch = await bcrypt.compare(
+                password,
+                user.password
+            )
+
+            if (!isMatch) {
+                return NextResponse.json(
+                    { message: "Invalid password" },
+                    { status: 401 }
+                )
+            }
+
+            const response = NextResponse.json({
+                message: "Login successful",
+                user: {
+                    id: user.id,
+                    role: user.role,
+                    schoolSlug: user.school?.slug,
+                },
+            })
+
+            response.cookies.set("token", String(user.id), {
+                httpOnly: true,
+                path: "/",
+            })
+
+            return response
+        }
+
+        // ===== STUDENT LOGIN =====
+        const student = await prisma.student.findUnique({
+            where: {
+                studentId: loginId,
+            },
+            include: {
+                school: true,
+                class: true,
+            },
+        })
+
+        if (!student) {
             return NextResponse.json(
                 { message: "User not found" },
                 { status: 404 }
-            );
+            )
         }
 
-        // 2. Check password
-        const isMatch = await bcrypt.compare(password, user.password);
+        const isMatch = await bcrypt.compare(
+            password,
+            student.password
+        )
 
         if (!isMatch) {
             return NextResponse.json(
                 { message: "Invalid password" },
                 { status: 401 }
-            );
+            )
         }
-
-        // 3. Success
 
         const response = NextResponse.json({
             message: "Login successful",
             user: {
-                id: user.id,
-                email: user.email,
-                role: user.role,
-                schoolSlug: user.school.slug,
+                id: student.id,
+                role: "STUDENT",
+                schoolSlug: student.school.slug,
             },
-        });
+        })
 
-        // set cookie
-        response.cookies.set("token", user.id, {
+        response.cookies.set("token", String(student.id), {
             httpOnly: true,
             path: "/",
         })
-        return response
 
+        return response
     } catch (error) {
-        console.log(error)
+        console.error(error)
+
         return NextResponse.json(
             { message: "Something went wrong" },
             { status: 500 }
-        );
+        )
     }
 }

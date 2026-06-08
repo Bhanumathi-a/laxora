@@ -109,7 +109,7 @@ const TeacherTable = ({
   const renderRow = (item: Teacher) => (
     <tr
       key={item.id}
-      className='border-b border-gray-200 even:bg-slate-50 text-sm hover:bg-blue-lighter'>
+      className='border-b border-gray-200  text-sm hover:bg-blue-lighter dark:border-gray-800'>
       <td className='flex items-center gap-4 p-4'>
         <div className='hidden md:table-cell'>
           {item.image ? (
