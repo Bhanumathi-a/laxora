@@ -2,20 +2,52 @@
 @custom-variant dark (&:where(.dark, .dark *));
 @import "react-big-calendar/lib/css/react-big-calendar.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #0d2440;
+@theme {
+  /* This configures custom variables in Tailwind v4.0+ */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-brand: var(--brand);
+  --color-accent: var(--accent);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+}
 
-  --card: #ffffff;
-  --sidebar: #f7f8fa;
+:root {
+  /* === LIGHT THEME === */
+  --background: #f8fafc; /* Soft, clean grey-blue canvas */
+  --foreground: #0f172a; /* Deep slate for high-contrast text */
+
+  --sidebar: #0d2440; /* Your Brand Color as the striking sidebar */
+  --sidebar-foreground: #ffffff; /* White text for the dark sidebar */
+
+  --card: #ffffff; /* Crisp white cards to pop off the canvas */
+  --card-foreground: #0f172a;
+
+  --brand: #0d2440; /* Primary brand color */
+  --accent: #38bdf8; /* Vibrant light-blue/cyan for active states, charts, & badges */
+  --muted: #64748b; /* Medium slate for captions/secondary text */
+  --border: #e2e8f0; /* Subtle dividers */
 }
 
 .dark {
-  --background: #0f172a;
-  --foreground: #f8fafc;
+  /* === DARK THEME === */
+  --background: #080d16; /* Deep, premium near-black with a hint of blue navy */
+  --foreground: #f8fafc; /* Off-white for crisp, readable text */
 
-  --card: #1e293b;
-  --sidebar: #172033;
+  --sidebar: #0b1524; /* Slightly darker than your brand color for deep contrast */
+  --sidebar-foreground: #f1f5f9;
+
+  --card: #0d2440; /* Your Brand Color used as the container surfaces */
+  --card-foreground: #ffffff;
+
+  --brand: #1e3a61; /* A slightly brighter, illuminated version of your brand color */
+  --accent: #38bdf8; /* Electric cyan accent stays vibrant on dark surfaces */
+  --muted: #94a3b8; /* Lighter slate for dark mode secondary text readability */
+  --border: #1e293b; /* Dark divider lines */
 }
 
 @theme inline {
@@ -53,6 +85,15 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.inputClass {
+  @apply w-full px-8 py-4 rounded-lg font-medium bg-gray-100 dark:bg-[#253446] border border-gray-200 dark:border-gray-700 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white;
+}
+.btn {
+  @apply mt-5 w-full py-4 rounded-lg font-semibold tracking-wide bg-brand text-white hover:bg-blue-main transition duration-300 cursor-pointer shadow;
+}
+
+/* calendar */
 
 .react-calendar {
   border: none !important;

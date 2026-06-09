@@ -7,6 +7,15 @@ import {
     Landmark, FlaskConical, UsersRound
 } from "lucide-react"
 
+
+
+export const superAdminMenu = [
+    { label: "Dashboard", href: "/", icon: LayoutDashboard },
+    { label: "Schools", href: "/schools", icon: Building2 },
+    { label: "Subscription", href: "/subscription" },
+    { label: "Reports", href: "/reports" },
+    { label: "Support / Ticket", href: "/support" },
+]
 export const schoolAdminMenu = [
     {
         label: "Dashboard",
@@ -44,12 +53,21 @@ export const schoolAdminMenu = [
         icon: Building2,
     },
 ]
-
-export const superAdminMenu = [
-    { label: "Dashboard", href: "/", icon: LayoutDashboard },
-    { label: "Schools", href: "/schools", icon: Building2 },
-    { label: "Subscription", href: "/subscription" },
-    { label: "Reports", href: "/reports" },
-    { label: "Support / Ticket", href: "/support" },
+export const studentMenu = [
+    {
+        label: "Dashboard",
+        href: "/",
+        icon: LayoutDashboard,
+    },
+    {
+        label: "Subjects",
+        href: "/subject",
+        icon: FlaskConical
+    },
+    {
+        label: "Attendance",
+        href: "/attendance",
+        icon: Building2,
+    },
 ]
 

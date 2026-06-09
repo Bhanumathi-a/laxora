@@ -1,19 +1,8 @@
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
 import "./globals.css"
 import { Toaster } from "react-hot-toast"
 import { ThemeProvider } from "@/components/providers/ThemeProvider"
 import ThemeSwitcher from "@/components/ui/ThemeSwitcher"
-
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// })
-
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// })
 
 export const metadata: Metadata = {
   title: "Laxora",
@@ -29,7 +18,7 @@ export default function RootLayout({
     <html
       suppressHydrationWarning
       lang='en'
-      className={`h-full antialiased bg-[var(--background)]`}>
+      className={`h-full antialiased bg-background`}>
       <body className='min-h-full flex flex-col'>
         <ThemeProvider>
           {children}

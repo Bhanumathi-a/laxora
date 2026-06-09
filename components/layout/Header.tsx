@@ -1,8 +1,13 @@
+"use client"
 import { Bell, MessageSquare, Search, User } from "lucide-react"
 import React from "react"
 import { SearchBox } from "../ui/SearchBox"
 
 export const Header = () => {
+  const logout = async () => {
+    await fetch("/api/logout", { method: "POST" })
+    window.location.href = "/login"
+  }
   return (
     <>
       <div className='flex flex-col md:flex-row justify-between items-center p-4'>
@@ -33,12 +38,12 @@ export const Header = () => {
               </span>
             </div>
           </div>
+          <button
+            onClick={logout}
+            className='p-3 pt-2 py-2 rounded-lg font-semibold tracking-wide bg-brand text-white hover:bg-blue-main transition duration-300 cursor-pointer inline-block'>
+            Logout
+          </button>
         </div>
-        {/* <button
-              onClick={logout}
-              className='mt-5 w-auto py-4 rounded-lg font-semibold tracking-wide bg-brand text-white hover:bg-blue-main transition duration-300 cursor-pointer inline-block'>
-              <span className='ml-3'>Logout</span>
-            </button> */}
       </div>
     </>
   )
