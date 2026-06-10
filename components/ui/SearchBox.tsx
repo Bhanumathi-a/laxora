@@ -9,7 +9,7 @@ export const SearchBox = () => {
           name=''
           id=''
           placeholder='Search...'
-          className='width-[200px] p-2 bg-transparent outline-none'
+          className='width-[200px] p-2  inputClass '
         />
         <Search className='text-brand  w-5 h-5' />
       </div>

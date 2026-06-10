@@ -112,9 +112,8 @@ export default function Dashboard() {
   return (
     <>
       <div className='h-screen flex'>
-        <div className='w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] p-4'>
-          <Sidebar role='SUPER_ADMIN' />
-        </div>
+        <Sidebar role='SUPER_ADMIN' />
+
         <div className='w-[86%] md:w-[92%] lg:w-[84%] xl-w-[86%] bg-[#f7f8fa] flex flex-col'>
           <div className='flex justify-between items-center p-4'>
             {/* Searchbar */}
@@ -185,12 +184,12 @@ export default function Dashboard() {
             <div className='flex p-4 flex-col gap-4 md:flex-row w-full'>
               <div className='w-full lg:w-2/3 flex flex-col gap-8'>
                 {/* user card */}
-                <div className='flex gap-4 justify-between items-center flex-wrap'>
-                  <UserCard type='Schools' />
-                  <UserCard type='Total Students' />
-                  <UserCard type='Total Staff' />
-                  <UserCard type='Detaprtments' />
-                </div>
+                {/* <div className='flex gap-4 justify-between items-center flex-wrap'>
+                  <UserCard type='Students' count={studentsCount} />
+                  <UserCard type='Staff' count={teachersCount} />
+                  <UserCard type='Parents' count={parentsCount} />
+                  <UserCard type='Departments' count={subjectsCount} />
+                </div> */}
                 {/* other actions */}
                 <div className='w-full bg-white gap-4 p-4'>
                   <div>

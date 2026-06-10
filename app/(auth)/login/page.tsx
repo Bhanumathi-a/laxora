@@ -72,14 +72,14 @@ export default function Login() {
             </div>
           </div>
         </div>
-        <div className='flex-1 bg-blue-light2 text-center hidden lg:flex'>
-          <div className='w-[500px] m-auto'>
+        <div className='flex-1 bg-[#51A4D5] text-center hidden lg:flex'>
+          <div className='w-full h-full object-fill m-auto'>
             <Image
               src='/banner.jpg'
-              width={500}
-              height={500}
+              width={930}
+              height={634}
               alt='Laxora'
-              className='w-full h-auto'
+              className='w-full h-auto object-fill'
               loading='eager'
             />
           </div>

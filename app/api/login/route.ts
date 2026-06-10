@@ -98,6 +98,11 @@ export async function POST(req: Request) {
             httpOnly: true,
             path: "/",
         })
+        response.cookies.set("studentId", student.studentId, {
+            httpOnly: true,
+            path: "/",
+        })
+
 
         return response
     } catch (error) {

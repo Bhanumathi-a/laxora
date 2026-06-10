@@ -21,9 +21,8 @@ export default function Sidebar({ role, slug, schoolName }: SidebarProps) {
   const titleLogo = title.toUpperCase().slice(0, 1)
 
   return (
-    <aside className='w-64 border-r min-h-screen'>
+    <aside className='w-[14%] md:w-[8%] lg:w-[16%] xl:w-[14%] p-2 lg:p-4 h-full bg-[#F8FAFC] dark:bg-[#0D2541]'>
       <div className=' flex items-center justify-start mb-2'>
-        {/* <span>logo</span> */}
         <strong className='font-bold text-2xl mr-3 lg:hidden'>
           {titleLogo}
         </strong>

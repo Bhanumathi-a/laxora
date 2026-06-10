@@ -114,7 +114,7 @@ const SchoolClassForm = ({
           </h2>
           <div className='mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
             <div className='sm:col-span-3'>
-              <InputField label='Name' {...register("name")} />
+              <InputField label='Class Name' {...register("name")} />
               {errors.name && (
                 <p className='text-red-400'>{errors.name.message}</p>
               )}
