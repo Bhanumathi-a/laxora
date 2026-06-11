@@ -35,6 +35,9 @@ const schoolClassDetailsPage = async ({ params }: Props) => {
     where: {
       id: schoolClassId,
     },
+    include: {
+      subjects: true,
+    },
   })
 
   if (!schoolClass || !school) {
@@ -60,6 +63,9 @@ const schoolClassDetailsPage = async ({ params }: Props) => {
                       <span>Section: {schoolClass.section}</span>
                       <p className='text-sm '>
                         <strong>Capacity:</strong> {schoolClass.capacity}
+                        <br />
+                        <strong>Subjects:</strong>
+                        {schoolClass.subjects.map((s) => s.name).join(", ")}
                       </p>
                     </div>
                   </div>

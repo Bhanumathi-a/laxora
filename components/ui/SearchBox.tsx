@@ -3,15 +3,15 @@ import { Search } from "lucide-react"
 export const SearchBox = () => {
   return (
     <>
-      <div className=' flex items-center gap-2 text-xs  ring-[1.5px] ring-brand px-2 rounded-sm'>
+      <div className='searchBox'>
         <input
           type='text'
           name=''
           id=''
           placeholder='Search...'
-          className='width-[200px] p-2  inputClass '
+          className='width-[200px]  inputClass '
         />
-        <Search className='text-brand  w-5 h-5' />
+        <Search className='text-brand dark:text-gray-100  w-5 h-5' />
       </div>
     </>
   )

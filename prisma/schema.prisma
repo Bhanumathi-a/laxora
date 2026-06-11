@@ -96,6 +96,7 @@ model Class {
   schoolId String
   school   School    @relation(fields: [schoolId], references: [id])
   students Student[]
+  subjects Subject[]
 
   @@unique([schoolId, name, section])
 }
@@ -109,6 +110,8 @@ model Subject {
 
   teacherId String?
   teacher   Teacher? @relation(fields: [teacherId], references: [id])
+
+  classes Class[]
 }
 
 enum Role {

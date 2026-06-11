@@ -5,6 +5,7 @@ type SchoolClassInput = {
     name: string
     section: string
     capacity: number
+    subjectIds?: string
 
 }
 export async function POST(req: Request) {
@@ -14,7 +15,7 @@ export async function POST(req: Request) {
             name,
             section,
             capacity,
-
+            subjectIds
         } = body
         if (!name) {
             return NextResponse.json(
@@ -35,6 +36,11 @@ export async function POST(req: Request) {
                 section,
                 capacity,
                 schoolId: school.id,
+                subjects: {
+                    connect: subjectIds
+                        ? [{ id: subjectIds }]
+                        : [],
+                },
             },
         });
         return NextResponse.json({

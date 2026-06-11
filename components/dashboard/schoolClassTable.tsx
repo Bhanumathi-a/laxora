@@ -19,14 +19,17 @@ import FormModal from "../forms/FormModal"
 import SchoolClassForm from "../forms/schoolClass/schoolClassForm"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
+import { Subject } from "@/types/subject"
 
 type SchoolClassTableProps = {
   initialschoolClass: SchoolClass[]
+  subjects: Subject[]
   slug: string
 }
 
 const SchoolClassTable = ({
   initialschoolClass: initialschoolClass,
+  subjects,
   slug,
 }: SchoolClassTableProps) => {
   const router = useRouter()
@@ -45,9 +48,7 @@ const SchoolClassTable = ({
     if (sortBy === "name") {
       return a.name.localeCompare(b.name)
     }
-    // if (sortBy === "student") {
-    //   return a.student.localeCompare(b.student)
-    // }
+
     return 0
   })
   const columns = [
@@ -63,6 +64,11 @@ const SchoolClassTable = ({
     {
       header: "capacity",
       accessor: "capacity",
+      className: "hidden md:table-cell",
+    },
+    {
+      header: "subjects",
+      accessor: "subjects",
       className: "hidden md:table-cell",
     },
 
@@ -112,6 +118,12 @@ const SchoolClassTable = ({
         <p className='text-xs text-gray-500'>{item.section}</p>
       </td>
       <td className='hidden md:table-cell'>{item.capacity}</td>
+
+      <td className='hidden md:table-cell'>
+        {item.subjects?.length
+          ? item.subjects.map((s) => s.name).join(", ")
+          : "No subject"}
+      </td>
       <td>
         <div className='flex items-center gap-2'>
           <IconButton
@@ -233,6 +245,7 @@ const SchoolClassTable = ({
           setOpen={setOpen}
           schoolClass={schoolClass}
           setschoolClass={setschoolClass}
+          subjects={subjects}
         />
       </FormModal>
     </>

@@ -20,7 +20,13 @@ export async function PUT(
                     name: body.name,
                     capacity: body.capacity,
                     section: body.section,
-                    schoolId: body.schoolId
+
+                    subjects: {
+                        set: [],
+                        connect: body.subjectIds
+                            ? [{ id: body.subjectIds }]
+                            : [],
+                    },
 
                 },
             })
