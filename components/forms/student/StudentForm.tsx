@@ -313,7 +313,11 @@ const StudentForm = ({
             )}
           </div>
           <div className='sm:col-span-3'>
-            <InputField label='Admission Date' {...register("admissionDate")} />
+            <InputField
+              label='Admission Date'
+              {...register("admissionDate")}
+              type='date'
+            />
             {errors.admissionDate && (
               <p className='text-red-400'>{errors.admissionDate.message}</p>
             )}

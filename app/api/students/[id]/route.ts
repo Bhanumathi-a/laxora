@@ -28,11 +28,13 @@ export async function PUT(
                     pin: body.pin,
                     state: body.state,
                     country: body.country,
-                    class: body.class,
-                    dateOfBirth: body.dateOfBirth,
+                    classId: body.classId,
                     bloodGroup: body.bloodGroup,
                     previousClass: body.previousClass,
-                    admissionDate: body.admissionDate
+                    dateOfBirth: body.dateOfBirth
+                        ? new Date(body.dateOfBirth)
+                        : null,
+                    admissionDate: new Date(body.admissionDate),
                 },
             })
 
