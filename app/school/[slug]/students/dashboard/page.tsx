@@ -89,16 +89,35 @@ const StudentDashboard = async ({ params }: Props) => {
                         <strong> Class:</strong> {student.class?.name} -{" "}
                         {student.class?.section}
                         <br />
+                        <strong> Previous Class:</strong>{" "}
+                        {student.previousClass}
+                        <br />
                         <strong>Address:</strong> {student.address}
                       </p>
                       <div className='flex flex-col  gap-2  font-medium text-sm'>
                         <div className='flex gap-2 items-center w-full'>
                           <Droplet />
-                          <span>O+</span>
+                          <span>{student.bloodGroup}</span>
                         </div>
                         <div className='flex gap-2 items-center w-full '>
                           <CalendarDays />
-                          <span>date of birth</span>
+                          <span>
+                            {student.dateOfBirth
+                              ? new Date(
+                                  student.dateOfBirth,
+                                ).toLocaleDateString()
+                              : "-"}
+                          </span>
+                        </div>
+                        <div className='flex gap-2 items-center w-full '>
+                          <CalendarDays />
+                          <span>
+                            {student.admissionDate
+                              ? new Date(student.admissionDate)
+                                  .toISOString()
+                                  .split("T")[0]
+                              : "-"}
+                          </span>
                         </div>
                         <div className='flex gap-2 items-center w-full'>
                           <AtSign />

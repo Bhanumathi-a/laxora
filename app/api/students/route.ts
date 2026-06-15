@@ -18,6 +18,18 @@ type StudentInput = {
     classId: string
     image?: string
     password: string
+    dateOfBirth: Date
+    bloodGroup:
+    | "O+"
+    | "O-"
+    | "A+"
+    | "A-"
+    | "B+"
+    | "B-"
+    | "AB+"
+    | "AB-"
+    previousClass: string
+    admissionDate: Date
 }
 export async function POST(req: Request) {
     try {
@@ -36,7 +48,11 @@ export async function POST(req: Request) {
             country,
             classId,
             image,
-            password
+            password,
+            dateOfBirth,
+            bloodGroup,
+            previousClass,
+            admissionDate
         } = body
         if (!firstName || !studentId || !classId) {
             return NextResponse.json(
@@ -69,7 +85,15 @@ export async function POST(req: Request) {
                 classId,
                 image: image || "",
                 schoolId: school.id,
-                password: hashedPassword
+                password: hashedPassword,
+                dateOfBirth: dateOfBirth
+                    ? new Date(dateOfBirth)
+                    : null,
+
+                admissionDate: new Date(admissionDate),
+
+                bloodGroup,
+                previousClass,
             },
         });
         return NextResponse.json({

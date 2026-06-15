@@ -29,6 +29,10 @@ export async function PUT(
                     state: body.state,
                     country: body.country,
                     class: body.class,
+                    dateOfBirth: body.dateOfBirth,
+                    bloodGroup: body.bloodGroup,
+                    previousClass: body.previousClass,
+                    admissionDate: body.admissionDate
                 },
             })
 

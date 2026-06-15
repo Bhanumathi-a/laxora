@@ -47,6 +47,10 @@ const StudentForm = ({
         classId: data.classId,
         image: "",
         password: data.password,
+        dateOfBirth: new Date(data.dateOfBirth),
+        bloodGroup: data.bloodGroup,
+        previousClass: data.previousClass,
+        admissionDate: new Date(data.admissionDate),
       }
 
       const response = await fetch("/api/students", {
@@ -121,6 +125,23 @@ const StudentForm = ({
             country: studentData.country,
             classId: studentData.classId ?? "",
             password: studentData.password,
+            dateOfBirth: studentData.dateOfBirth
+              ? new Date(studentData.dateOfBirth).toISOString().split("T")[0]
+              : "",
+            bloodGroup:
+              (studentData.bloodGroup as
+                | "O+"
+                | "O-"
+                | "A+"
+                | "A-"
+                | "B+"
+                | "B-"
+                | "AB+"
+                | "AB-") ?? "O+",
+            previousClass: studentData.previousClass ?? "",
+            admissionDate: studentData.admissionDate
+              ? new Date(studentData.admissionDate).toISOString().split("T")[0]
+              : "",
           }
         : {},
   })
@@ -151,6 +172,16 @@ const StudentForm = ({
               )}
             </div>
             <div className='sm:col-span-3'>
+              <InputField
+                label='Student Date of Birth'
+                type='date'
+                {...register("dateOfBirth")}
+              />
+              {errors.dateOfBirth && (
+                <p className='text-red-400'>{errors.dateOfBirth.message}</p>
+              )}
+            </div>
+            <div className='sm:col-span-3'>
               <SelectField
                 label='Gender'
                 name='gender'
@@ -163,6 +194,26 @@ const StudentForm = ({
               />
               {errors.gender && (
                 <p className='text-red-400'>{errors.gender.message}</p>
+              )}
+            </div>
+            <div className='sm:col-span-3'>
+              <SelectField
+                label='Blood Group'
+                name='bloodGroup'
+                options={[
+                  { label: "O+", value: "O+" },
+                  { label: "O-", value: "O-" },
+                  { label: "A+", value: "A+" },
+                  { label: "A-", value: "A-" },
+                  { label: "B+", value: "B+" },
+                  { label: "B-", value: "B-" },
+                  { label: "AB+", value: "AB+" },
+                  { label: "AB-", value: "AB-" },
+                ]}
+                register={register("bloodGroup")}
+              />
+              {errors.bloodGroup && (
+                <p className='text-red-400'>{errors.bloodGroup.message}</p>
               )}
             </div>
             {mode === "create" && (
@@ -254,6 +305,18 @@ const StudentForm = ({
               }))}
               register={register("classId")}
             />
+          </div>
+          <div className='sm:col-span-3'>
+            <InputField label='Previous Class' {...register("previousClass")} />
+            {errors.previousClass && (
+              <p className='text-red-400'>{errors.previousClass.message}</p>
+            )}
+          </div>
+          <div className='sm:col-span-3'>
+            <InputField label='Admission Date' {...register("admissionDate")} />
+            {errors.admissionDate && (
+              <p className='text-red-400'>{errors.admissionDate.message}</p>
+            )}
           </div>
         </div>
       </div>

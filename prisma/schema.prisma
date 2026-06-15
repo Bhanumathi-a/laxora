@@ -31,26 +31,30 @@ model User {
 }
 
 model Student {
-  id        String  @id @default(cuid())
-  firstName String
-  lastName  String
-  gender    String
-  studentId String  @unique
-  email     String
-  phone     String
-  address   String
-  city      String
-  pin       String
-  state     String
-  country   String
-  image     String?
-  schoolId  String
-  school    School  @relation(fields: [schoolId], references: [id])
-  parentId  String?
-  parent    Parent? @relation(fields: [parentId], references: [id])
-  classId   String
-  class     Class   @relation(fields: [classId], references: [id])
-  password  String
+  id            String    @id @default(cuid())
+  firstName     String
+  lastName      String
+  gender        String
+  studentId     String    @unique
+  email         String
+  phone         String
+  address       String
+  city          String
+  pin           String
+  state         String
+  country       String
+  image         String?
+  schoolId      String
+  school        School    @relation(fields: [schoolId], references: [id])
+  parentId      String?
+  parent        Parent?   @relation(fields: [parentId], references: [id])
+  classId       String
+  class         Class     @relation(fields: [classId], references: [id])
+  password      String
+  dateOfBirth   DateTime?
+  bloodGroup    String?
+  previousClass String?
+  admissionDate DateTime  @default(now())
 }
 
 model Teacher {

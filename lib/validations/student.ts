@@ -13,7 +13,12 @@ export const studentSchema = z.object({
     state: z.string().min(2, "State required"),
     country: z.string().min(2, "Country required"),
     classId: z.string().min(1, "Class is required"),
-    password: z.string().min(6)
+    password: z.string().min(6),
+    dateOfBirth: z.string().min(1, "Date of birth is required"),
+    admissionDate: z.string().min(1, "Admission date is required"),
+    bloodGroup: z.enum(["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"]),
+    previousClass: z.string().min(1, "Previous class is required"),
+
 })
 
 export type StudentFormData = z.infer<typeof studentSchema>

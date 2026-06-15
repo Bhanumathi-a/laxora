@@ -81,6 +81,11 @@ const StudentTable = ({
       className: "hidden md:table-cell",
     },
     {
+      header: "Addmission Date",
+      accessor: "admissionDate",
+      className: "hidden md:table-cell",
+    },
+    {
       header: "Actions",
       accessor: "action",
     },
@@ -144,6 +149,11 @@ const StudentTable = ({
       </td>
       <td className='hidden md:table-cell'>{item.phone}</td>
       <td className='hidden md:table-cell break-normal w-80'>{item.address}</td>
+      <td className='hidden md:table-cell'>
+        {item.admissionDate
+          ? new Date(item.admissionDate).toISOString().split("T")[0]
+          : "-"}
+      </td>
 
       <td>
         <div className='flex items-center gap-2'>
