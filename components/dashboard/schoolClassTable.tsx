@@ -108,7 +108,7 @@ const SchoolClassTable = ({
   const renderRow = (item: SchoolClass) => (
     <tr
       key={item.id}
-      className='border-b border-gray-200  text-sm hover:bg-blue-lighter dark:border-gray-800'>
+      className='border-b border-gray-200  text-sm hover:bg-blue-lighter dark:hover:bg-gray-900 '>
       <td className='flex items-center gap-4 p-4'>
         <div className='flex flex-col'>
           <h3 className='font-semibold'>{item.name}</h3>

@@ -12,7 +12,7 @@ const IconButton = ({
   icon: Icon,
   bgColor = "bg-blue-100",
   iconColor = "text-blue-600",
-  darBgColor = "bg-[#253648}",
+  darBgColor = "bg-[#253648]",
   onClick,
 }: IconButtonProps) => {
   return (

@@ -292,35 +292,40 @@ const StudentForm = ({
               )}
             </div>
           </div>
-          <h2 className='text-base/7 font-semibold text-gray-900 mt-10'>
+          <h2 className='mt-8 text-base/7 font-semibold text-gray-900 w-full'>
             Academic Details
           </h2>
-          <div className='sm:col-span-3'>
-            <SelectField
-              label='Class'
-              name='classId'
-              options={SchoolClasses.map((schoolClass) => ({
-                label: `${schoolClass.name} - ${schoolClass.section}`,
-                value: schoolClass.id,
-              }))}
-              register={register("classId")}
-            />
-          </div>
-          <div className='sm:col-span-3'>
-            <InputField label='Previous Class' {...register("previousClass")} />
-            {errors.previousClass && (
-              <p className='text-red-400'>{errors.previousClass.message}</p>
-            )}
-          </div>
-          <div className='sm:col-span-3'>
-            <InputField
-              label='Admission Date'
-              {...register("admissionDate")}
-              type='date'
-            />
-            {errors.admissionDate && (
-              <p className='text-red-400'>{errors.admissionDate.message}</p>
-            )}
+          <div className='mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
+            <div className='sm:col-span-3'>
+              <SelectField
+                label='Class'
+                name='classId'
+                options={SchoolClasses.map((schoolClass) => ({
+                  label: `${schoolClass.name} - ${schoolClass.section}`,
+                  value: schoolClass.id,
+                }))}
+                register={register("classId")}
+              />
+            </div>
+            <div className='sm:col-span-3'>
+              <InputField
+                label='Previous Class'
+                {...register("previousClass")}
+              />
+              {errors.previousClass && (
+                <p className='text-red-400'>{errors.previousClass.message}</p>
+              )}
+            </div>
+            <div className='sm:col-span-3'>
+              <InputField
+                label='Admission Date'
+                {...register("admissionDate")}
+                type='date'
+              />
+              {errors.admissionDate && (
+                <p className='text-red-400'>{errors.admissionDate.message}</p>
+              )}
+            </div>
           </div>
         </div>
       </div>

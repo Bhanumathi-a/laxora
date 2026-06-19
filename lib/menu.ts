@@ -47,11 +47,11 @@ export const schoolAdminMenu = [
         href: "/subject",
         icon: FlaskConical
     },
-    // {
-    //     label: "Attendance",
-    //     href: "/attendance",
-    //     icon: Building2,
-    // },
+    {
+        label: "Attendance",
+        href: "/attendance",
+        icon: Building2,
+    },
 ]
 export const studentMenu = [
     {

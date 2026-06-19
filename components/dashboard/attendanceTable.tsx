@@ -9,69 +9,82 @@ import {
   User,
 } from "lucide-react"
 import { useState } from "react"
-import { Subject } from "@/types/subject"
-// import { subjectData } from "@/lib/data"
+import { Attendance } from "@/types/attendance"
+// import { attendancesData } from "@/lib/data"
 import Table from "@/components/ui/Table"
 import Image from "next/image"
 import IconButton from "@/components/ui/IconButton"
 import { SearchBox } from "@/components/ui/SearchBox"
 import FormModal from "../forms/FormModal"
-import SubjectForm from "../forms/subject/subjectForm"
+import AttendanceForm from "../forms/attendance/AttendanceForm"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
-import { Teacher } from "@/types/teacher"
+import { Student } from "@/types/student"
 
-type SubjectTableProps = {
-  initialsubject: Subject[]
-  teachers: Teacher[]
+type AttendanceTableProps = {
+  initialAttendances: Attendance[]
+  students: Student[]
   slug: string
 }
 
-const SubjectTable = ({
-  initialsubject: initialsubject,
-  teachers,
+const AttendanceTable = ({
+  initialAttendances: initialAttendances,
+  students,
   slug,
-}: SubjectTableProps) => {
+}: AttendanceTableProps) => {
   const router = useRouter()
   const [open, setOpen] = useState(false)
-  const [selectedSubject, setSelectedSubject] = useState<Subject | null>(null)
+  const [selectedAttendance, setSelectedAttendance] =
+    useState<Attendance | null>(null)
   const [formMode, setFormMode] = useState<"create" | "edit">("create")
   // sort
   const [sortBy, setSortBy] = useState("")
   const [showSort, setShowSort] = useState(false)
-  // const [subject, setsubject] = useState<Subject[]>(subjectData)
-  const [subject, setsubject] = useState<Subject[]>(initialsubject)
+  // const [attendances, setAttendances] = useState<Attendance[]>(attendancesData)
+  const [attendances, setAttendances] =
+    useState<Attendance[]>(initialAttendances)
 
-  const sortedsubject = [...subject].sort((a, b) => {
-    if (sortBy === "name") {
-      return a.name.localeCompare(b.name)
-    }
-
-    return 0
-  })
+  // const sortedAttendances = [...attendances].sort((a, b) => {
+  //   if (sortBy === "name") {
+  //     return a.firstName.localeCompare(b.firstName)
+  //   }
+  //   if (sortBy === "class") {
+  //     return `${a.class?.name ?? ""}-${a.class?.section ?? ""}`.localeCompare(
+  //       `${b.class?.name ?? ""}-${b.class?.section ?? ""}`,
+  //     )
+  //   }
+  //   if (sortBy === "attendanceId") {
+  //     return a.attendanceId.localeCompare(b.attendanceId)
+  //   }
+  //   return 0
+  // })
   const columns = [
     {
-      header: "Subject Name",
-      accessor: "name",
+      header: "Student",
+      accessor: "student",
     },
-
     {
-      header: "Teacher",
-      accessor: "teacher",
+      header: "Date",
+      accessor: "date",
     },
-
+    {
+      header: "Status",
+      accessor: "status",
+    },
     {
       header: "Actions",
       accessor: "action",
     },
   ]
   const handleDelete = async (id: string) => {
-    const confirmed = confirm("Are you sure you want to delete this Subject?")
+    const confirmed = confirm(
+      "Are you sure you want to delete this attendance?",
+    )
 
     if (!confirmed) return
 
     try {
-      const response = await fetch(`/api/subject/${id}`, {
+      const response = await fetch(`/api/attendance/${id}`, {
         method: "DELETE",
       })
 
@@ -83,44 +96,40 @@ const SubjectTable = ({
         return
       }
 
-      toast.success("Subject deleted successfully")
+      toast.success("Attendance deleted successfully")
 
-      setsubject((prev) => prev.filter((subject) => subject.id !== id))
+      setAttendances((prev) =>
+        prev.filter((attendance) => attendance.id !== id),
+      )
     } catch (error) {
       console.log(error)
-      toast.error("Failed to delete Subject")
+      toast.error("Failed to delete attendance")
     }
   }
-  const renderRow = (item: Subject) => (
+  const renderRow = (item: Attendance) => (
     <tr
       key={item.id}
-      className='border-b border-gray-200  text-sm hover:bg-blue-lighter dark:hover:bg-gray-900 '>
+      className='border-b border-gray-200  text-sm hover:bg-blue-lighter dark:border-gray-800'>
       <td className='flex items-center gap-4 p-4'>
         <div className='flex flex-col'>
-          <h3 className='font-semibold'>{item.name}</h3>
+          <h3 className='font-semibold'>
+            {item.student
+              ? `${item.student.firstName} ${item.student.lastName}`
+              : "Unknown Student"}
+          </h3>
         </div>
       </td>
-      <td>
-        {item.teacher ? (
-          <button
-            onClick={() =>
-              router.push(`/school/${slug}/teachers/${item.teacher?.teacherId}`)
-            }
-            className='text-blue-600 hover:underline'>
-            {item.teacher.firstName} {item.teacher.lastName}
-          </button>
-        ) : (
-          <span className='text-gray-400'>Not assigned</span>
-        )}
+      <td className='hidden md:table-cell'>
+        {new Date(item.date).toISOString().split("T")[0]}
       </td>
-
+      <td className='hidden md:table-cell'>{item.status}</td>
       <td>
         <div className='flex items-center gap-2'>
           <IconButton
             icon={Eye}
             bgColor='bg-blue-lighter'
             iconColor='text-blue-dark'
-            onClick={() => router.push(`/school/${slug}/subject/${item.id}`)}
+            onClick={() => router.push(`/school/${slug}/attendance/${item.id}`)}
           />
           {role === "ADMIN" && (
             <>
@@ -130,7 +139,7 @@ const SubjectTable = ({
                 iconColor='text-blue-dark'
                 onClick={() => {
                   setFormMode("edit")
-                  setSelectedSubject(item)
+                  setSelectedAttendance(item)
                   setOpen(true)
                 }}
               />
@@ -149,9 +158,9 @@ const SubjectTable = ({
   const role = "ADMIN"
   return (
     <>
-      <div className='h-full m-4 mt-0 bg-white p-4 rounded-md'>
+      <div className='h-full m-4 mt-0 bg-white p-4 rounded-md  dark:bg-brand '>
         <div className='flex flex-col md:flex-row  items-center justify-between'>
-          <div className=' text-lg font-semibold my-4'>All Subjects</div>
+          <div className=' text-lg font-semibold my-4'>All Attendances</div>
           <div className='flex flex-col md:flex-row items-center gap-4 w-full md:w-auto'>
             {/* <TableSearch /> */}
             <SearchBox />
@@ -168,7 +177,7 @@ const SubjectTable = ({
                   iconColor='text-blue-dark'
                   onClick={() => setShowSort(!showSort)}
                 />
-                {showSort && (
+                {/* {showSort && (
                   <div className='absolute right-0 mt-2 bg-white shadow-lg border rounded-lg p-2 z-50 w-40'>
                     <button
                       onClick={() => {
@@ -176,26 +185,26 @@ const SubjectTable = ({
                         setShowSort(false)
                       }}
                       className='block w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md'>
-                      Sort by Subject
+                      Sort by Name
                     </button>
                     <button
                       onClick={() => {
-                        setSortBy("grade")
+                        setSortBy("classId")
                         setShowSort(false)
                       }}
                       className='block w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md'>
-                      Sort by teacher
+                      Sort by classId
                     </button>
-                    {/* <button
+                    <button
                       onClick={() => {
-                        setSortBy("subjectId")
+                        setSortBy("attendanceId")
                         setShowSort(false)
                       }}
                       className='block w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md'>
                       Sort by ID
-                    </button> */}
+                    </button>
                   </div>
-                )}
+                )} */}
               </div>
 
               {role === "ADMIN" && (
@@ -205,7 +214,7 @@ const SubjectTable = ({
                   iconColor='text-blue-dark'
                   onClick={() => {
                     setFormMode("create")
-                    setSelectedSubject(null)
+                    setSelectedAttendance(null)
                     setOpen(true)
                   }}
                 />
@@ -213,26 +222,26 @@ const SubjectTable = ({
             </div>
           </div>
         </div>
-        {sortedsubject.length === 0 ? (
+        {/* {sortedAttendances.length === 0 ? (
           <div className='flex items-center justify-center py-10 text-gray-500'>
-            No Subject found
+            No attendances found
           </div>
-        ) : (
-          <Table columns={columns} data={sortedsubject} renderRow={renderRow} />
-        )}
+        ) : ( */}
+        <Table columns={columns} data={attendances} renderRow={renderRow} />
+        {/* )} */}
         {/* <Pagination /> */}
       </div>
       <FormModal open={open} setOpen={setOpen}>
-        <SubjectForm
+        <AttendanceForm
           mode={formMode}
-          subjectData={selectedSubject || undefined}
+          attendanceData={selectedAttendance || undefined}
           setOpen={setOpen}
-          subject={subject}
-          setsubject={setsubject}
-          teachers={teachers}
+          attendance={attendances}
+          setattendance={setAttendances}
+          students={students}
         />
       </FormModal>
     </>
   )
 }
-export default SubjectTable
+export default AttendanceTable

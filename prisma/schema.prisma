@@ -31,11 +31,11 @@ model User {
 }
 
 model Student {
-  id            String    @id @default(cuid())
+  id            String       @id @default(cuid())
   firstName     String
   lastName      String
   gender        String
-  studentId     String    @unique
+  studentId     String       @unique
   email         String
   phone         String
   address       String
@@ -45,16 +45,28 @@ model Student {
   country       String
   image         String?
   schoolId      String
-  school        School    @relation(fields: [schoolId], references: [id])
+  school        School       @relation(fields: [schoolId], references: [id])
   parentId      String?
-  parent        Parent?   @relation(fields: [parentId], references: [id])
+  parent        Parent?      @relation(fields: [parentId], references: [id])
   classId       String
-  class         Class     @relation(fields: [classId], references: [id])
+  class         Class        @relation(fields: [classId], references: [id])
   password      String
   dateOfBirth   DateTime?
   bloodGroup    String?
   previousClass String?
-  admissionDate DateTime  @default(now())
+  admissionDate DateTime     @default(now())
+  attendance    Attendance[]
+}
+
+model Attendance {
+  id     String           @id @default(cuid())
+  date   DateTime
+  status AttendanceStatus
+
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id])
+
+  createdAt DateTime @default(now())
 }
 
 model Teacher {
@@ -106,16 +118,13 @@ model Class {
 }
 
 model Subject {
-  id   String @id @default(cuid())
-  name String
-
-  schoolId String
-  school   School @relation(fields: [schoolId], references: [id])
-
+  id        String   @id @default(cuid())
+  name      String
+  schoolId  String
+  school    School   @relation(fields: [schoolId], references: [id])
   teacherId String?
   teacher   Teacher? @relation(fields: [teacherId], references: [id])
-
-  classes Class[]
+  classes   Class[]
 }
 
 enum Role {
@@ -124,4 +133,9 @@ enum Role {
   TEACHER
   STUDENT
   PARENT
+}
+
+enum AttendanceStatus {
+  PRESENT
+  ABSENT
 }

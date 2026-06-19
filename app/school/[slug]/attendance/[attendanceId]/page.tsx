@@ -20,28 +20,32 @@ import Link from "next/link"
 type Props = {
   params: Promise<{
     slug: string
-    subjectId: string
+    attendanceId: string
   }>
 }
 
-const subjectDetailsPage = async ({ params }: Props) => {
-  const { subjectId, slug } = await params
+const attendanceDetailsPage = async ({ params }: Props) => {
+  const { attendanceId, slug } = await params
 
   const school = await prisma.school.findUnique({
     where: { slug },
   })
 
-  const subject = await prisma.subject.findUnique({
+  const attendance = await prisma.attendance.findUnique({
     where: {
-      id: subjectId,
+      id: attendanceId,
     },
     include: {
-      teacher: true,
+      student: {
+        include: {
+          class: true,
+        },
+      },
     },
   })
 
-  if (!subject || !school) {
-    return <div>Subject not found</div>
+  if (!attendance || !school) {
+    return <div>Attendance not found</div>
   }
 
   return (
@@ -49,7 +53,7 @@ const subjectDetailsPage = async ({ params }: Props) => {
       <div className='h-screen flex'>
         <Sidebar role='ADMIN' slug={slug} schoolName={school.name} />
 
-        <div className='w-[86%] md:w-[92%] lg:w-[84%] xl-w-[86%] bg-[#f7f8fa]  dark:bg-[#1e293b] flex flex-col'>
+        <div className='w-[86%] md:w-[92%] lg:w-[84%] xl-w-[86%] bg-[#f7f8fa] flex flex-col'>
           <Header />
           <div className='flex flex-col justify-between items-center gap-4 md:flex-row'>
             <div className='flex flex-1 p-4 flex-col gap-4 md:flex-row'>
@@ -57,13 +61,23 @@ const subjectDetailsPage = async ({ params }: Props) => {
                 <div className='flex flex-col lg:flex-row gap-4'>
                   <div className='bg-blue-light2 px-4 py-6 rounded-md flex-1 flex gap-4'>
                     <div className='w-2/3 flex flex-col justify-between gap-4'>
-                      <h2 className='text-xl font-semibold'>{subject.name}</h2>
+                      <h2 className='text-xl font-semibold'>
+                        <strong>Student:</strong>{" "}
+                        {attendance?.student?.firstName}{" "}
+                        {attendance?.student?.lastName}
+                      </h2>
+                      <p>
+                        <strong>Class:</strong> {attendance.student.class.name}{" "}
+                        -{attendance.student.class.section}
+                      </p>
 
-                      <p className='text-sm '>
-                        <strong>Teacher:</strong>{" "}
-                        {subject.teacher
-                          ? `${subject.teacher.firstName} ${subject.teacher.lastName}`
-                          : "Teacher not assigned"}
+                      <p>
+                        <strong>Date:</strong>{" "}
+                        {attendance?.date.toLocaleDateString()}
+                      </p>
+
+                      <p>
+                        <strong>Status:</strong> {attendance?.status}
                       </p>
                     </div>
                   </div>
@@ -87,4 +101,4 @@ const subjectDetailsPage = async ({ params }: Props) => {
   )
 }
 
-export default subjectDetailsPage
+export default attendanceDetailsPage

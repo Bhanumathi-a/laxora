@@ -50,7 +50,7 @@ const StudentDetailsPage = async ({ params }: Props) => {
       <div className='h-screen flex'>
         <Sidebar role='ADMIN' slug={slug} schoolName={school.name} />
 
-        <div className='w-[86%] md:w-[92%] lg:w-[84%] xl-w-[86%] bg-[#f7f8fa] flex flex-col'>
+        <div className='w-[86%] md:w-[92%] lg:w-[84%] xl-w-[86%] bg-[#f7f8fa]  dark:bg-[#1e293b] flex flex-col'>
           <Header />
           <div className='flex flex-col justify-between items-center gap-4 md:flex-row'>
             <div className='flex flex-1 p-4 flex-col gap-4 md:flex-row'>
