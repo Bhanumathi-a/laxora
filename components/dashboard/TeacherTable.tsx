@@ -19,14 +19,17 @@ import FormModal from "../forms/FormModal"
 import TeacherForm from "../forms/teacher/TeacherForm"
 import toast from "react-hot-toast"
 import { useRouter } from "next/navigation"
+import { Subject } from "@/types/subject"
 
 type TeacherTableProps = {
   initialTeachers: Teacher[]
+  subjects: Subject[]
   slug: string
 }
 
 const TeacherTable = ({
   initialTeachers: initialTeachers,
+  subjects,
   slug,
 }: TeacherTableProps) => {
   const router = useRouter()
@@ -43,9 +46,9 @@ const TeacherTable = ({
     if (sortBy === "name") {
       return a.firstName.localeCompare(b.firstName)
     }
-    if (sortBy === "subject") {
-      return a.subject.localeCompare(b.subject)
-    }
+    // if (sortBy === "subject") {
+    //   return a.subject.localeCompare(b.subject)
+    // }
     if (sortBy === "teacherId") {
       return a.teacherId.localeCompare(b.teacherId)
     }
@@ -130,11 +133,15 @@ const TeacherTable = ({
           <h3 className='font-semibold'>
             {item.firstName} {item.lastName}
           </h3>
-          <p className='text-xs text-gray-500'>{item.subject}</p>
+          <p className='text-xs text-gray-500'>
+            {item.subjects?.map((subject) => subject.name).join(", ")}
+          </p>
         </div>
       </td>
       <td>{item.teacherId}</td>
-      <td className='hidden md:table-cell'>{item.subject}</td>
+      <td className='hidden md:table-cell'>
+        {item.subjects?.map((subject) => subject.name).join(", ")}
+      </td>
       <td className='hidden md:table-cell'>{item.phone}</td>
       <td className='hidden md:table-cell'>{item.address}</td>
 
@@ -259,6 +266,7 @@ const TeacherTable = ({
           setOpen={setOpen}
           teachers={teachers}
           setTeachers={setTeachers}
+          subjects={subjects}
         />
       </FormModal>
     </>

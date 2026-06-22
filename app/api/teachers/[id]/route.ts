@@ -28,7 +28,21 @@ export async function PUT(
                     pin: body.pin,
                     state: body.state,
                     country: body.country,
-                    subject: body.subject,
+
+                    subjects: {
+                        set: [],
+                        connect: body.subjectIds.map((id: string) => ({
+                            id,
+                        })),
+                    },
+
+                    bloodGroup: body.bloodGroup,
+
+                    dateOfBirth: body.dateOfBirth
+                        ? new Date(body.dateOfBirth)
+                        : null,
+
+                    joiningDate: new Date(body.joiningDate),
                 },
             })
 

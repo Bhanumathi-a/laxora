@@ -35,6 +35,9 @@ const TeacherDetailsPage = async ({ params }: Props) => {
     where: {
       teacherId,
     },
+    include: {
+      subjects: true,
+    },
   })
 
   if (!teacher || !school) {
@@ -71,18 +74,31 @@ const TeacherDetailsPage = async ({ params }: Props) => {
                       <h2 className='text-xl font-semibold'>
                         {teacher.firstName} {teacher.lastName}
                       </h2>
-                      <span>Subject: {teacher.subject}</span>
+                      <p className='text-sm '>
+                        <strong>Subject:</strong>
+
+                        {teacher.subjects
+                          .map((subject) => subject.name)
+                          .join(", ")}
+                      </p>
                       <p className='text-sm '>
                         <strong>Address:</strong> {teacher.address}
                       </p>
                       <div className='flex flex-col  gap-2  font-medium text-sm'>
                         <div className='flex gap-2 items-center w-full'>
                           <Droplet />
-                          <span>O+</span>
+                          <span>{teacher.bloodGroup}</span>
                         </div>
                         <div className='flex gap-2 items-center w-full '>
                           <CalendarDays />
-                          <span>date of birth</span>
+
+                          <span>
+                            {teacher.dateOfBirth
+                              ? new Date(
+                                  teacher.dateOfBirth,
+                                ).toLocaleDateString()
+                              : "N/A"}
+                          </span>
                         </div>
                         <div className='flex gap-2 items-center w-full'>
                           <AtSign />
@@ -109,7 +125,9 @@ const TeacherDetailsPage = async ({ params }: Props) => {
                       <BookOpen />
                       <div>
                         <h3 className='text-xl font-semibold'>
-                          {teacher.subject}
+                          {teacher.subjects
+                            .map((subject) => subject.name)
+                            .join(", ")}
                         </h3>
                         <span className='text-sm text-gray-400'>Subject</span>
                       </div>

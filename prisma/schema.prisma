@@ -70,23 +70,30 @@ model Attendance {
 }
 
 model Teacher {
-  id        String    @id @default(cuid())
-  teacherId String    @unique
+  id        String @id @default(cuid())
+  teacherId String @unique
   firstName String
   lastName  String
   email     String
   phone     String
-  subject   String
-  image     String?
-  schoolId  String
-  school    School    @relation(fields: [schoolId], references: [id])
-  gender    String
-  address   String
-  city      String
-  pin       String
-  state     String
-  country   String
-  subjects  Subject[]
+  password  String
+
+  dateOfBirth DateTime?
+  bloodGroup  String?
+  joiningDate DateTime  @default(now())
+
+  subjects Subject[]
+  image    String?
+
+  schoolId String
+  school   School @relation(fields: [schoolId], references: [id])
+
+  gender  String
+  address String
+  city    String
+  pin     String
+  state   String
+  country String
 }
 
 model Parent {
@@ -125,6 +132,8 @@ model Subject {
   teacherId String?
   teacher   Teacher? @relation(fields: [teacherId], references: [id])
   classes   Class[]
+
+  @@unique([schoolId, name])
 }
 
 enum Role {

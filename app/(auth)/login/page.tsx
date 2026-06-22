@@ -29,6 +29,8 @@ export default function Login() {
       router.push("/dashboard")
     } else if (data.user.role === "STUDENT") {
       router.push(`/school/${data.user.schoolSlug}/students/dashboard`)
+    } else if (data.user.role === "TEACHER") {
+      router.push(`/school/${data.user.schoolSlug}/teacher/dashboard`)
     } else {
       router.push(`/school/${data.user.schoolSlug}`)
     }

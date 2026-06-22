@@ -10,7 +10,7 @@ export async function POST(req: Request) {
 
         if (!loginId || !password) {
             return NextResponse.json(
-                { message: "Email and password required" },
+                { message: "Email/ID and password required" },
                 { status: 400 }
             )
         }
@@ -26,10 +26,7 @@ export async function POST(req: Request) {
         })
 
         if (user) {
-            const isMatch = await bcrypt.compare(
-                password,
-                user.password
-            )
+            const isMatch = await bcrypt.compare(password, user.password)
 
             if (!isMatch) {
                 return NextResponse.json(
@@ -43,11 +40,11 @@ export async function POST(req: Request) {
                 user: {
                     id: user.id,
                     role: user.role,
-                    schoolSlug: user.school?.slug,
+                    schoolSlug: user.school.slug,
                 },
             })
 
-            response.cookies.set("token", String(user.id), {
+            response.cookies.set("token", user.id, {
                 httpOnly: true,
                 path: "/",
             })
@@ -62,49 +59,89 @@ export async function POST(req: Request) {
             },
             include: {
                 school: true,
-                class: true,
             },
         })
 
-        if (!student) {
-            return NextResponse.json(
-                { message: "User not found" },
-                { status: 404 }
-            )
+        if (student) {
+            const isMatch = await bcrypt.compare(password, student.password)
+
+            if (!isMatch) {
+                return NextResponse.json(
+                    { message: "Invalid password" },
+                    { status: 401 }
+                )
+            }
+
+            const response = NextResponse.json({
+                message: "Login successful",
+                user: {
+                    id: student.id,
+                    role: "STUDENT",
+                    schoolSlug: student.school.slug,
+                },
+            })
+
+            response.cookies.set("token", student.id, {
+                httpOnly: true,
+                path: "/",
+            })
+
+            response.cookies.set("studentId", student.studentId, {
+                httpOnly: true,
+                path: "/",
+            })
+
+            return response
         }
 
-        const isMatch = await bcrypt.compare(
-            password,
-            student.password
+        // ===== TEACHER LOGIN =====
+        const teacher = await prisma.teacher.findUnique({
+            where: {
+                teacherId: loginId,
+            },
+            include: {
+                school: true,
+            },
+        })
+
+        if (teacher) {
+            const isMatch = await bcrypt.compare(password, teacher.password)
+
+            if (!isMatch) {
+                return NextResponse.json(
+                    { message: "Invalid password" },
+                    { status: 401 }
+                )
+            }
+
+            const response = NextResponse.json({
+                message: "Login successful",
+                user: {
+                    id: teacher.id,
+                    role: "TEACHER",
+                    schoolSlug: teacher.school.slug,
+                },
+            })
+
+            response.cookies.set("token", teacher.id, {
+                httpOnly: true,
+                path: "/",
+            })
+
+            response.cookies.set("teacherId", teacher.teacherId, {
+                httpOnly: true,
+                path: "/",
+            })
+
+            return response
+        }
+
+        // ===== NOT FOUND =====
+        return NextResponse.json(
+            { message: "User not found" },
+            { status: 404 }
         )
 
-        if (!isMatch) {
-            return NextResponse.json(
-                { message: "Invalid password" },
-                { status: 401 }
-            )
-        }
-
-        const response = NextResponse.json({
-            message: "Login successful",
-            user: {
-                id: student.id,
-                role: "STUDENT",
-                schoolSlug: student.school.slug,
-            },
-        })
-
-        response.cookies.set("token", String(student.id), {
-            httpOnly: true,
-            path: "/",
-        })
-        response.cookies.set("studentId", student.studentId, {
-            httpOnly: true,
-            path: "/",
-        })
-
-
-        return response
     } catch (error) {
         console.error(error)
 

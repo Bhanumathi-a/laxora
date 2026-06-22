@@ -22,6 +22,14 @@ const TeacherList = async ({ params }: Props) => {
     where: {
       schoolId: school.id,
     },
+    include: {
+      subjects: true,
+    },
+  })
+  const subjects = await prisma.subject.findMany({
+    where: {
+      schoolId: school.id,
+    },
   })
 
   return (
@@ -31,7 +39,11 @@ const TeacherList = async ({ params }: Props) => {
 
         <div className='flex-1 overflow-auto bg-[#f7f8fa]  dark:bg-[#1e293b] '>
           <Header />
-          <TeacherTable slug={slug} initialTeachers={teachers} />
+          <TeacherTable
+            initialTeachers={teachers}
+            subjects={subjects}
+            slug={slug}
+          />
         </div>
       </div>
     </>

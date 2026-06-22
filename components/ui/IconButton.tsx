@@ -20,9 +20,7 @@ const IconButton = ({
       <button
         onClick={onClick}
         className={`w-8 h-8 flex items-center justify-center rounded-full p-2 cursor-pointer ${bgColor} dark:${darBgColor}`}>
-        <Icon
-          className={`w-4 h-4 ${iconColor} text-brand dark:text-gray-100`}
-        />
+        <Icon className={`w-4 h-4  text-brand dark:text-blue-light`} />
       </button>
     </>
   )

@@ -9,12 +9,15 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { TeacherFormData, teacherSchema } from "@/lib/validations/teacher"
 import toast from "react-hot-toast"
 
+import { Subject } from "@/types/subject"
+
 type TeacherFormProps = {
   mode: "create" | "edit"
   teacherData?: Teacher
   setOpen: (open: boolean) => void
   teachers: Teacher[]
   setTeachers: React.Dispatch<React.SetStateAction<Teacher[]>>
+  subjects: Subject[]
 }
 const TeacherForm = ({
   mode,
@@ -22,6 +25,7 @@ const TeacherForm = ({
   setOpen,
   teachers,
   setTeachers,
+  subjects,
 }: TeacherFormProps) => {
   const [loading, setLoading] = useState(false)
 
@@ -41,8 +45,12 @@ const TeacherForm = ({
         pin: data.pin,
         state: data.state,
         country: data.country,
-        subject: data.subject,
+        subjectIds: data.subjectIds,
         image: "",
+        password: data.password,
+        dateOfBirth: new Date(data.dateOfBirth),
+        bloodGroup: data.bloodGroup,
+        joiningDate: new Date(data.joiningDate),
       }
 
       const response = await fetch("/api/teachers", {
@@ -115,10 +123,29 @@ const TeacherForm = ({
             pin: teacherData.pin,
             state: teacherData.state,
             country: teacherData.country,
-            subject: teacherData.subject,
+            subjectIds: teacherData.subjectIds,
+            password: teacherData.password,
+            dateOfBirth: teacherData.dateOfBirth
+              ? new Date(teacherData.dateOfBirth).toISOString().split("T")[0]
+              : "",
+            bloodGroup:
+              (teacherData.bloodGroup as
+                | "O+"
+                | "O-"
+                | "A+"
+                | "A-"
+                | "B+"
+                | "B-"
+                | "AB+"
+                | "AB-") ?? "O+",
+
+            joiningDate: teacherData.joiningDate
+              ? new Date(teacherData.joiningDate).toISOString().split("T")[0]
+              : "",
           }
         : {},
   })
+  console.log(subjects)
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className='space-y-12 overflow-auto'>
@@ -170,6 +197,30 @@ const TeacherForm = ({
                 <p className='text-red-400'>{errors.email.message}</p>
               )}
             </div>
+            {mode === "create" && (
+              <>
+                <div className='sm:col-span-3'>
+                  <InputField
+                    label='Password'
+                    {...register("password")}
+                    type='password'
+                  />
+                  {errors.password && (
+                    <p className='text-red-400'>{errors.password.message}</p>
+                  )}
+                </div>
+                <div className='sm:col-span-3'>
+                  <InputField
+                    label='Confirm Password'
+                    {...register("password")}
+                    type='password'
+                  />
+                  {errors.password && (
+                    <p className='text-red-400'>{errors.password.message}</p>
+                  )}
+                </div>
+              </>
+            )}
             <div className='sm:col-span-3'>
               <InputField label='Mobile Number' {...register("phone")} />
               {errors.phone && (
@@ -209,20 +260,59 @@ const TeacherForm = ({
                 <p className='text-red-400'>{errors.country.message}</p>
               )}
             </div>
-          </div>
-          <h2 className='text-base/7 font-semibold text-gray-900 mt-10'>
-            Academic Details
-          </h2>
-          <div className='mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
             <div className='sm:col-span-3'>
-              <InputField label='Subject' {...register("subject")} />
-              {errors.subject && (
-                <p className='text-red-400'>{errors.subject.message}</p>
-              )}
+              <InputField
+                label='Date of Birth'
+                type='date'
+                {...register("dateOfBirth")}
+              />
             </div>
-            {/* <div className='sm:col-span-3'>
-              <InputField label='Previous Subject' name='prevSubject' />
-            </div> */}
+            <div className='sm:col-span-3'>
+              <SelectField
+                label='Blood Group'
+                name='bloodGroup'
+                options={[
+                  { label: "O+", value: "O+" },
+                  { label: "O-", value: "O-" },
+                  { label: "A+", value: "A+" },
+                  { label: "A-", value: "A-" },
+                  { label: "B+", value: "B+" },
+                  { label: "B-", value: "B-" },
+                  { label: "AB+", value: "AB+" },
+                  { label: "AB-", value: "AB-" },
+                ]}
+                register={register("bloodGroup")}
+              />
+            </div>
+            <div className='sm:col-span-3'>
+              <InputField
+                label='Joining Date'
+                type='date'
+                {...register("joiningDate")}
+              />
+            </div>
+            <div className='sm:col-span-3'>
+              <div className='sm:col-span-3'>
+                <label className='block mb-2 font-medium'>Subjects</label>
+
+                {(subjects || []).map((subject) => (
+                  <label
+                    key={subject.id}
+                    className='flex items-center gap-2 mb-2'>
+                    <input
+                      type='checkbox'
+                      value={subject.id}
+                      {...register("subjectIds")}
+                    />
+                    {subject.name}
+                  </label>
+                ))}
+
+                {errors.subjectIds && (
+                  <p className='text-red-400'>{errors.subjectIds.message}</p>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>

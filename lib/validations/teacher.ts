@@ -21,7 +21,22 @@ export const teacherSchema = z.object({
     pin: z.string().min(5, "Pin required"),
     state: z.string().min(2, "State required"),
     country: z.string().min(2, "Country required"),
-    subject: z.string().min(1, "Subject required"),
+    subjectIds: z.array(z.string()).optional(),
+    dateOfBirth: z.string().min(1, "Date of birth is required"),
+
+    bloodGroup: z.enum([
+        "O+",
+        "O-",
+        "A+",
+        "A-",
+        "B+",
+        "B-",
+        "AB+",
+        "AB-",
+    ]),
+
+    joiningDate: z.string().min(1, "Joining date is required"),
+    password: z.string().min(6),
 })
 
 export type TeacherFormData = z.infer<typeof teacherSchema>
