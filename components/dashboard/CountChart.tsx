@@ -24,7 +24,7 @@ const data = [
 
 const CountChart = () => {
   return (
-    <div className='bg-white rounded-xl w-full h-full p-4'>
+    <div className='bg-white dark:bg-brand rounded-xl w-full h-full p-4'>
       <div className='flex items-center justify-between'>
         <div className='text-lg font-semibold'>Student</div>
         <Ellipsis />

@@ -6,6 +6,9 @@ export async function POST() {
     res.cookies.set("token", "", {
         expires: new Date(0),
     })
+    res.cookies.delete("token")
+    res.cookies.delete("userName")
+    res.cookies.delete("role")
 
     return res
 }

@@ -30,7 +30,7 @@ export default function Login() {
     } else if (data.user.role === "STUDENT") {
       router.push(`/school/${data.user.schoolSlug}/students/dashboard`)
     } else if (data.user.role === "TEACHER") {
-      router.push(`/school/${data.user.schoolSlug}/teacher/dashboard`)
+      router.push(`/school/${data.user.schoolSlug}/teachers/dashboard`)
     } else {
       router.push(`/school/${data.user.schoolSlug}`)
     }

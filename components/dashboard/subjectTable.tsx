@@ -149,7 +149,7 @@ const SubjectTable = ({
   const role = "ADMIN"
   return (
     <>
-      <div className='h-full m-4 mt-0 bg-white p-4 rounded-md'>
+      <div className='h-full m-4 mt-0 bg-white p-4 rounded-md  dark:bg-brand '>
         <div className='flex flex-col md:flex-row  items-center justify-between'>
           <div className=' text-lg font-semibold my-4'>All Subjects</div>
           <div className='flex flex-col md:flex-row items-center gap-4 w-full md:w-auto'>

@@ -1,3 +1,4 @@
+import { cookies } from "next/headers"
 import Announcements from "@/components/dashboard/Announcements"
 import EventCalendar from "@/components/dashboard/EventCalendar"
 import ScheduleCalendar from "@/components/dashboard/ScheduleCalendar"
@@ -21,34 +22,40 @@ import Link from "next/link"
 type Props = {
   params: Promise<{
     slug: string
-    studentId: string
+    teacherId: string
   }>
 }
 
-const StudentDetailsPage = async ({ params }: Props) => {
-  const { studentId, slug } = await params
+const TeacherDashboard = async ({ params }: Props) => {
+  const { slug } = await params
+  const cookieStore = await cookies()
 
+  const teacherId = cookieStore.get("teacherId")?.value
   const school = await prisma.school.findUnique({
     where: { slug },
   })
+  console.log("teacherId cookie:", teacherId)
 
-  const student = await prisma.student.findUnique({
+  if (!teacherId) {
+    return <div>Please login again</div>
+  }
+
+  const teacher = await prisma.teacher.findUnique({
     where: {
-      studentId,
+      teacherId,
     },
     include: {
-      class: true,
+      subjects: true,
     },
   })
-
-  if (!student || !school) {
-    return <div>Student not found</div>
+  if (!teacher || !school) {
+    return <div>Teacher not found</div>
   }
 
   return (
     <>
       <div className='h-screen flex'>
-        <Sidebar role='ADMIN' slug={slug} schoolName={school.name} />
+        <Sidebar role='ADMIN' slug={slug} schoolName={school?.name ?? ""} />
 
         <div className='w-[86%] md:w-[92%] lg:w-[84%] xl-w-[86%] bg-[#f7f8fa]  dark:bg-[#1e293b] flex flex-col'>
           <Header />
@@ -56,12 +63,12 @@ const StudentDetailsPage = async ({ params }: Props) => {
             <div className='flex flex-1 p-4 flex-col gap-4 md:flex-row'>
               <div className='w-full lg:w-2/3 '>
                 <div className='flex flex-col lg:flex-row gap-4'>
-                  <div className='bg-blue-light2 text-brand dark:text-brand px-4 py-6 rounded-md flex-1 flex gap-4'>
+                  <div className='bg-blue-light2 px-4 py-6 rounded-md flex-1 flex gap-4'>
                     <div className='w-1/3 flex items-center justify-center '>
-                      {student.image ? (
+                      {teacher.image ? (
                         <Image
-                          src={student.image}
-                          alt={student.firstName}
+                          src={teacher.image}
+                          alt={teacher.firstName}
                           height={144}
                           className='w-36 h-36 rounded-full object-cover'
                         />
@@ -73,52 +80,51 @@ const StudentDetailsPage = async ({ params }: Props) => {
                     </div>
                     <div className='w-2/3 flex flex-col justify-between gap-4'>
                       <h2 className='text-xl font-semibold'>
-                        {student.firstName} {student.lastName}
+                        {teacher.firstName} {teacher.lastName}
                       </h2>
 
                       <p className='text-sm '>
-                        <strong>ID:</strong> {student.studentId}
-                        <br />
-                        <strong> Class:</strong> {student.class?.name} -{" "}
-                        {student.class?.section}
-                        <br />
-                        <strong> Previous Class:</strong>{" "}
-                        {student.previousClass}
-                        <br />
-                        <strong>Address:</strong> {student.address}
+                        <strong>Subject:</strong>
+
+                        {teacher.subjects
+                          .map((subject) => subject.name)
+                          .join(", ")}
+                      </p>
+                      <p>
+                        <strong>Address:</strong> {teacher.address}
                       </p>
                       <div className='flex flex-col  gap-2  font-medium text-sm'>
                         <div className='flex gap-2 items-center w-full'>
                           <Droplet />
-                          <span>{student.bloodGroup}</span>
+                          <span>{teacher.bloodGroup}</span>
                         </div>
                         <div className='flex gap-2 items-center w-full '>
                           <CalendarDays />
                           <span>
-                            {student.dateOfBirth
+                            {teacher.dateOfBirth
                               ? new Date(
-                                  student.dateOfBirth,
+                                  teacher.dateOfBirth,
                                 ).toLocaleDateString()
                               : "-"}
                           </span>
                         </div>
-                        <div className='flex gap-2 items-center w-full '>
+                        {/* <div className='flex gap-2 items-center w-full '>
                           <CalendarDays />
                           <span>
-                            {student.admissionDate
-                              ? new Date(student.admissionDate)
+                            {teacher.admissionDate
+                              ? new Date(teacher.admissionDate)
                                   .toISOString()
                                   .split("T")[0]
                               : "-"}
                           </span>
-                        </div>
+                        </div> */}
                         <div className='flex gap-2 items-center w-full'>
                           <AtSign />
-                          <span>{student.email}</span>
+                          <span>{teacher.email}</span>
                         </div>
                         <div className='flex gap-2 items-center w-full'>
                           <Phone />
-                          <span>{student.phone}</span>
+                          <span>{teacher.phone}</span>
                         </div>
                       </div>
                     </div>
@@ -137,9 +143,11 @@ const StudentDetailsPage = async ({ params }: Props) => {
                       <BookOpen />
                       <div>
                         <h3 className='text-xl font-semibold'>
-                          {student.class?.name} - {student.class?.section}
+                          {teacher.subjects
+                            .map((subject) => subject.name)
+                            .join(", ")}
                         </h3>
-                        <span className='text-sm text-gray-400'>Class</span>
+                        <span className='text-sm text-gray-400'>Subject</span>
                       </div>
                     </div>
                     <div className='bg-white p-4 rounded-md w-full flex gap-4 md:w-[46%] xl:w-[45%] 2xl:w-[48%]'>
@@ -170,19 +178,19 @@ const StudentDetailsPage = async ({ params }: Props) => {
                   <div className='text-lg font-semibold my-4'>Shortcuts</div>
                   <div className='flex  gap-4 mt-4 flex-wrap text-sm text-gray-400'>
                     <Link className='p-3 rounded-md bg-sky-50' href=''>
-                      Student&apos;s Teachers
+                      Teacher&apos;s Teachers
                     </Link>
                     <Link className='p-3 rounded-md bg-pink-100' href=''>
-                      Student Lessons
+                      Teacher Lessons
                     </Link>
                     <Link className='p-3 rounded-md bg-yellow-100' href=''>
-                      Student Results
+                      Teacher Results
                     </Link>
                     <Link className='p-3 rounded-md bg-green-100' href=''>
-                      Student Exams
+                      Teacher Exams
                     </Link>
                     <Link className='p-3 rounded-md bg-sky-50' href=''>
-                      Student Assignments
+                      Teacher Assignments
                     </Link>
                   </div>
                 </div>
@@ -198,4 +206,4 @@ const StudentDetailsPage = async ({ params }: Props) => {
   )
 }
 
-export default StudentDetailsPage
+export default TeacherDashboard

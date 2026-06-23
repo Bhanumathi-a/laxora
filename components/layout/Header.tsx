@@ -2,8 +2,25 @@
 import { Bell, MessageSquare, Search, User } from "lucide-react"
 import React from "react"
 import { SearchBox } from "../ui/SearchBox"
+import { useEffect, useState } from "react"
+
+type UserInfo = {
+  userName: string
+  role: string
+}
 
 export const Header = () => {
+  const [user, setUser] = useState<UserInfo | null>(null)
+
+  useEffect(() => {
+    const loadUser = async () => {
+      const res = await fetch("/api/me")
+      const data = await res.json()
+      setUser(data)
+    }
+
+    loadUser()
+  }, [])
   const logout = async () => {
     await fetch("/api/logout", { method: "POST" })
     window.location.href = "/login"
@@ -32,9 +49,12 @@ export const Header = () => {
           <div className='flex flex-row'>
             <User />
             <div className='flex flex-col'>
-              <span className='text-xs leading-3 font-medium'>John Doe</span>
+              <span className='text-xs leading-3 font-medium'>
+                {user?.userName || "Guest"}
+              </span>
+
               <span className='text-[10px] text-right text-gray-500'>
-                admin
+                {user?.role || ""}
               </span>
             </div>
           </div>

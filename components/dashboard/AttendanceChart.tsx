@@ -48,7 +48,7 @@ const data = [
 
 const AttendanceChart = () => {
   return (
-    <div className='w-full bg-white rounded-xl h-[450px] p-4'>
+    <div className='w-full bg-white dark:bg-brand rounded-xl h-[450px] p-4'>
       <div className='flex items-center justify-between'>
         <div className='text-lg font-semibold'>Attendance</div>
         <Ellipsis />

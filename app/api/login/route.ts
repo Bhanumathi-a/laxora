@@ -48,7 +48,8 @@ export async function POST(req: Request) {
                 httpOnly: true,
                 path: "/",
             })
-
+            response.cookies.set("userName", user.name)
+            response.cookies.set("role", user.role)
             return response
         }
 
@@ -90,6 +91,12 @@ export async function POST(req: Request) {
                 httpOnly: true,
                 path: "/",
             })
+            response.cookies.set(
+                "userName",
+                `${student.firstName} ${student.lastName}`
+            )
+
+            response.cookies.set("role", "STUDENT")
 
             return response
         }
@@ -132,7 +139,12 @@ export async function POST(req: Request) {
                 httpOnly: true,
                 path: "/",
             })
+            response.cookies.set(
+                "userName",
+                `${teacher.firstName} ${teacher.lastName}`
+            )
 
+            response.cookies.set("role", "TEACHER")
             return response
         }
 
