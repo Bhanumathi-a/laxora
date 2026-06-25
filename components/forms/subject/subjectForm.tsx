@@ -31,7 +31,7 @@ const SubjectForm = ({
 
   const onSubmit = async (data: SubjectFormData) => {
     if (mode === "create") {
-      const newSubject: Subject = {
+      const newSubject = {
         id: crypto.randomUUID(),
         schoolId: "",
         name: data.name,
@@ -98,7 +98,7 @@ const SubjectForm = ({
       mode === "edit" && subjectData
         ? {
             name: subjectData.name,
-            teacherId: subjectData.teacherId ?? undefined,
+            teacherId: subjectData.teachers?.[0]?.id ?? undefined,
           }
         : {},
   })

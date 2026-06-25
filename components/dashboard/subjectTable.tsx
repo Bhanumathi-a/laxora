@@ -101,14 +101,12 @@ const SubjectTable = ({
         </div>
       </td>
       <td>
-        {item.teacher ? (
-          <button
-            onClick={() =>
-              router.push(`/school/${slug}/teachers/${item.teacher?.teacherId}`)
-            }
-            className='text-blue-600 hover:underline'>
-            {item.teacher.firstName} {item.teacher.lastName}
-          </button>
+        {item.teachers?.length ? (
+          item.teachers.map((teacher) => (
+            <div key={teacher.id}>
+              {teacher.firstName} {teacher.lastName}
+            </div>
+          ))
         ) : (
           <span className='text-gray-400'>Not assigned</span>
         )}

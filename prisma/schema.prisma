@@ -125,13 +125,15 @@ model Class {
 }
 
 model Subject {
-  id        String   @id @default(cuid())
-  name      String
-  schoolId  String
-  school    School   @relation(fields: [schoolId], references: [id])
-  teacherId String?
-  teacher   Teacher? @relation(fields: [teacherId], references: [id])
-  classes   Class[]
+  id   String @id @default(cuid())
+  name String
+
+  schoolId String
+  school   School @relation(fields: [schoolId], references: [id])
+
+  teachers Teacher[]
+
+  classes Class[]
 
   @@unique([schoolId, name])
 }

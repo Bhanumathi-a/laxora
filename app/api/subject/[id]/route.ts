@@ -9,7 +9,7 @@ export async function PUT(
         const { id } = await context.params
 
         const body = await req.json()
-
+        console.log(body)
         const updatedSubject =
             await prisma.subject.update({
                 where: {
@@ -18,9 +18,16 @@ export async function PUT(
 
                 data: {
                     name: body.name,
-                    teacher: body.teacher,
-                    schoolId: body.schoolId
 
+                    teachers: {
+                        set: [],
+                        connect: body.teacherId
+                            ? [{ id: body.teacherId }]
+                            : [],
+                    },
+                },
+                include: {
+                    teachers: true,
                 },
             })
 

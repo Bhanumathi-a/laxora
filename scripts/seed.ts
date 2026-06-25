@@ -161,12 +161,16 @@ async function main() {
                 },
             },
             update: {
-                teacherId: teacher.id,
+                teachers: {
+                    connect: [{ id: teacher.id }],
+                },
             },
             create: {
                 name: "English",
                 schoolId: laxora.id,
-                teacherId: teacher.id,
+                teachers: {
+                    connect: [{ id: teacher.id }],
+                },
             },
         })
         console.log("✅ teacher created")

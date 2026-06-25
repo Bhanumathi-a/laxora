@@ -36,7 +36,7 @@ const subjectDetailsPage = async ({ params }: Props) => {
       id: subjectId,
     },
     include: {
-      teacher: true,
+      teachers: true,
     },
   })
 
@@ -61,8 +61,8 @@ const subjectDetailsPage = async ({ params }: Props) => {
 
                       <p className='text-sm '>
                         <strong>Teacher:</strong>{" "}
-                        {subject.teacher
-                          ? `${subject.teacher.firstName} ${subject.teacher.lastName}`
+                        {subject.teachers
+                          ? `${subject.teachers} `
                           : "Teacher not assigned"}
                       </p>
                     </div>

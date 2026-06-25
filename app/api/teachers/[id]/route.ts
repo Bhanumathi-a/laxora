@@ -9,6 +9,7 @@ export async function PUT(
         const { id } = await context.params
 
         const body = await req.json()
+        console.log("subjectIds:", body.subjectIds)
 
         const updatedTeacher =
             await prisma.teacher.update({

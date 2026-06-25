@@ -3,14 +3,14 @@ import { NextResponse } from "next/server";
 const prisma = new PrismaClient();
 type SubjectInput = {
     name: string
-    teacherId?: string
+    teacherIds?: string[]
 }
 export async function POST(req: Request) {
     try {
         const body: SubjectInput = await req.json();
         const {
             name,
-            teacherId,
+            teacherIds,
         } = body
         if (!name) {
             return NextResponse.json(
@@ -28,10 +28,16 @@ export async function POST(req: Request) {
         const subject = await prisma.subject.create({
             data: {
                 name,
-                teacherId: teacherId || null,
                 schoolId: school.id,
+
+                teachers: {
+                    connect:
+                        body.teacherIds?.map((id) => ({
+                            id,
+                        })) || [],
+                },
             },
-        });
+        })
         return NextResponse.json({
             message: "subject created",
             subject,

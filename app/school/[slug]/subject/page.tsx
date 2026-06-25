@@ -18,14 +18,15 @@ const SubjectList = async ({ params }: Props) => {
   if (!school) {
     return <div>School not found</div>
   }
-  const subject = await prisma.subject.findMany({
+  const subjects = await prisma.subject.findMany({
     where: {
       schoolId: school.id,
     },
     include: {
-      teacher: true,
+      teachers: true,
     },
   })
+
   const teachers = await prisma.teacher.findMany({
     where: {
       schoolId: school.id,
@@ -41,7 +42,7 @@ const SubjectList = async ({ params }: Props) => {
           <Header />
           <SubjectTable
             slug={slug}
-            initialsubject={subject}
+            initialsubject={subjects}
             teachers={teachers}
           />
         </div>
