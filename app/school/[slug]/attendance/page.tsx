@@ -1,7 +1,10 @@
 import { prisma } from "@/lib/prisma"
 import { Header } from "@/components/layout/Header"
 import Sidebar from "@/components/layout/Sidebar"
-import AttendanceTable from "@/components/dashboard/attendanceTable"
+
+import AttendanceCalendar from "@/components/dashboard/AttendanceCalendar"
+import AttendanceGrid from "@/components/dashboard/AttendanceGrid"
+import { SearchBox } from "@/components/ui/SearchBox"
 
 type Props = {
   params: Promise<{
@@ -18,18 +21,14 @@ const AttendanceList = async ({ params }: Props) => {
   if (!school) {
     return <div>School not found</div>
   }
-  const students = await prisma.student.findMany({
+
+  const classes = await prisma.class.findMany({
     where: {
       schoolId: school.id,
     },
+    orderBy: [{ name: "asc" }, { section: "asc" }],
   })
-  const attendance = await prisma.attendance.findMany({
-    include: {
-      student: true,
-    },
-  })
-  // console.log(JSON.stringify(attendance, null, 2))
-  const teachers = await prisma.teacher.findMany({
+  const students = await prisma.student.findMany({
     where: {
       schoolId: school.id,
     },
@@ -42,11 +41,13 @@ const AttendanceList = async ({ params }: Props) => {
 
         <div className='flex-1 overflow-auto bg-[#f7f8fa]  dark:bg-[#1e293b] '>
           <Header />
-          <AttendanceTable
-            initialAttendances={attendance}
-            students={students}
-            slug={slug}
-          />
+          <div className='h-full m-4 mt-0 bg-white p-4 rounded-md  dark:bg-brand '>
+            <AttendanceCalendar
+              classes={classes}
+              slug={slug}
+              students={students}
+            />
+          </div>
         </div>
       </div>
     </>

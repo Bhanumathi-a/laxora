@@ -44,20 +44,6 @@ const AttendanceTable = ({
   const [attendances, setAttendances] =
     useState<Attendance[]>(initialAttendances)
 
-  // const sortedAttendances = [...attendances].sort((a, b) => {
-  //   if (sortBy === "name") {
-  //     return a.firstName.localeCompare(b.firstName)
-  //   }
-  //   if (sortBy === "class") {
-  //     return `${a.class?.name ?? ""}-${a.class?.section ?? ""}`.localeCompare(
-  //       `${b.class?.name ?? ""}-${b.class?.section ?? ""}`,
-  //     )
-  //   }
-  //   if (sortBy === "attendanceId") {
-  //     return a.attendanceId.localeCompare(b.attendanceId)
-  //   }
-  //   return 0
-  // })
   const columns = [
     {
       header: "Student",
@@ -70,10 +56,6 @@ const AttendanceTable = ({
     {
       header: "Status",
       accessor: "status",
-    },
-    {
-      header: "Actions",
-      accessor: "action",
     },
   ]
   const handleDelete = async (id: string) => {
@@ -123,36 +105,6 @@ const AttendanceTable = ({
         {new Date(item.date).toISOString().split("T")[0]}
       </td>
       <td className='hidden md:table-cell'>{item.status}</td>
-      <td>
-        <div className='flex items-center gap-2'>
-          <IconButton
-            icon={Eye}
-            bgColor='bg-blue-lighter'
-            iconColor='text-blue-dark'
-            onClick={() => router.push(`/school/${slug}/attendance/${item.id}`)}
-          />
-          {role === "ADMIN" && (
-            <>
-              <IconButton
-                icon={FilePenLine}
-                bgColor='bg-blue-lighter'
-                iconColor='text-blue-dark'
-                onClick={() => {
-                  setFormMode("edit")
-                  setSelectedAttendance(item)
-                  setOpen(true)
-                }}
-              />
-              <IconButton
-                icon={Trash2}
-                bgColor='bg-red-200'
-                iconColor='text-blue-dark'
-                onClick={() => handleDelete(item.id)}
-              />
-            </>
-          )}
-        </div>
-      </td>
     </tr>
   )
   const role = "ADMIN"
@@ -164,83 +116,13 @@ const AttendanceTable = ({
           <div className='flex flex-col md:flex-row items-center gap-4 w-full md:w-auto'>
             {/* <TableSearch /> */}
             <SearchBox />
-            <div className='flex items-center gap-4'>
-              <IconButton
-                icon={SlidersHorizontal}
-                bgColor='bg-blue-lighter'
-                iconColor='text-blue-dark'
-              />
-              <div className='relative'>
-                <IconButton
-                  icon={ArrowDownWideNarrow}
-                  bgColor='bg-blue-lighter'
-                  iconColor='text-blue-dark'
-                  onClick={() => setShowSort(!showSort)}
-                />
-                {/* {showSort && (
-                  <div className='absolute right-0 mt-2 bg-white shadow-lg border rounded-lg p-2 z-50 w-40'>
-                    <button
-                      onClick={() => {
-                        setSortBy("name")
-                        setShowSort(false)
-                      }}
-                      className='block w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md'>
-                      Sort by Name
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSortBy("classId")
-                        setShowSort(false)
-                      }}
-                      className='block w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md'>
-                      Sort by classId
-                    </button>
-                    <button
-                      onClick={() => {
-                        setSortBy("attendanceId")
-                        setShowSort(false)
-                      }}
-                      className='block w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md'>
-                      Sort by ID
-                    </button>
-                  </div>
-                )} */}
-              </div>
-
-              {role === "ADMIN" && (
-                <IconButton
-                  icon={Plus}
-                  bgColor='bg-blue-lighter'
-                  iconColor='text-blue-dark'
-                  onClick={() => {
-                    setFormMode("create")
-                    setSelectedAttendance(null)
-                    setOpen(true)
-                  }}
-                />
-              )}
-            </div>
           </div>
         </div>
-        {/* {sortedAttendances.length === 0 ? (
-          <div className='flex items-center justify-center py-10 text-gray-500'>
-            No attendances found
-          </div>
-        ) : ( */}
+
         <Table columns={columns} data={attendances} renderRow={renderRow} />
-        {/* )} */}
+
         {/* <Pagination /> */}
       </div>
-      <FormModal open={open} setOpen={setOpen}>
-        <AttendanceForm
-          mode={formMode}
-          attendanceData={selectedAttendance || undefined}
-          setOpen={setOpen}
-          attendance={attendances}
-          setattendance={setAttendances}
-          students={students}
-        />
-      </FormModal>
     </>
   )
 }
