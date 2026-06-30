@@ -34,15 +34,22 @@ export async function POST(req: Request) {
                 { status: 400 }
             )
         }
-
-        const attendance = await prisma.attendance.create({
-            data: {
-                date: new Date(date),
-                status,
-                studentId,
+        const attendanceDate = new Date(date)
+        attendanceDate.setHours(12, 0, 0, 0)
+        const attendance = await prisma.attendance.upsert({
+            where: {
+                studentId_date: {
+                    studentId,
+                    date: attendanceDate,
+                },
             },
-            include: {
-                student: true,
+            update: {
+                status,
+            },
+            create: {
+                studentId,
+                date: attendanceDate,
+                status,
             },
         })
 
@@ -55,6 +62,55 @@ export async function POST(req: Request) {
 
         return NextResponse.json(
             { message: "Something went wrong" },
+            { status: 500 }
+        )
+    }
+}
+
+export async function GET(req: Request) {
+    try {
+        const { searchParams } = new URL(req.url)
+
+        const classId = searchParams.get("classId")
+        const month = searchParams.get("month")
+        const year = searchParams.get("year")
+
+        if (!classId || !month || !year) {
+            return NextResponse.json(
+                { message: "Missing required parameters" },
+                { status: 400 }
+            )
+        }
+
+        const startDate = new Date(Number(year), Number(month), 1)
+        const endDate = new Date(Number(year), Number(month) + 1, 1)
+
+        const attendance = await prisma.attendance.findMany({
+            where: {
+                student: {
+                    classId,
+                },
+                date: {
+                    gte: startDate,
+                    lt: endDate,
+                },
+            },
+            include: {
+                student: true,
+            },
+            orderBy: [
+                {
+                    date: "asc",
+                },
+            ],
+        })
+
+        return NextResponse.json(attendance)
+    } catch (error) {
+        console.log(error)
+
+        return NextResponse.json(
+            { message: "Failed to fetch attendance" },
             { status: 500 }
         )
     }

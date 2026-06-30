@@ -33,6 +33,11 @@ const AttendanceList = async ({ params }: Props) => {
       schoolId: school.id,
     },
   })
+  const subjects = await prisma.subject.findMany({
+    where: {
+      schoolId: school.id,
+    },
+  })
 
   return (
     <>
@@ -44,8 +49,8 @@ const AttendanceList = async ({ params }: Props) => {
           <div className='h-full m-4 mt-0 bg-white p-4 rounded-md  dark:bg-brand '>
             <AttendanceCalendar
               classes={classes}
-              slug={slug}
               students={students}
+              subjects={subjects}
             />
           </div>
         </div>

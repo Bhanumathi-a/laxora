@@ -8,15 +8,16 @@ datasource db {
 }
 
 model School {
-  id       String    @id @default(cuid())
-  name     String    @unique
-  users    User[]
-  students Student[]
-  teachers Teacher[]
-  parents  Parent[]
-  classes  Class[]
-  subjects Subject[]
-  slug     String    @unique
+  id             String         @id @default(cuid())
+  name           String         @unique
+  users          User[]
+  students       Student[]
+  teachers       Teacher[]
+  parents        Parent[]
+  classes        Class[]
+  subjects       Subject[]
+  slug           String         @unique
+  attendanceMode AttendanceMode @default(DAILY)
 }
 
 model User {
@@ -67,6 +68,8 @@ model Attendance {
   student   Student @relation(fields: [studentId], references: [id])
 
   createdAt DateTime @default(now())
+
+  @@unique([studentId, date])
 }
 
 model Teacher {
@@ -149,4 +152,11 @@ enum Role {
 enum AttendanceStatus {
   PRESENT
   ABSENT
+  HOLIDAY
+  LEAVE
+}
+
+enum AttendanceMode {
+  DAILY
+  SUBJECT_WISE
 }

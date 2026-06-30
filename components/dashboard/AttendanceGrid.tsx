@@ -1,8 +1,11 @@
 import { Student } from "@/types/student"
 import AttendanceCell from "./AttendanceCell"
 
+import { Attendance } from "@/types/attendance"
+
 type AttendanceGridProps = {
   students: Student[]
+  attendance: Attendance[]
   month: number
   year: number
   schoolClass: string
@@ -13,6 +16,7 @@ const AttendanceGrid = ({
   month,
   year,
   schoolClass,
+  attendance,
 }: AttendanceGridProps) => {
   const totalDays = new Date(year, month + 1, 0).getDate()
   const dates = Array.from({ length: totalDays }, (_, i) => i + 1)
@@ -28,17 +32,18 @@ const AttendanceGrid = ({
       isSaturday: date.getDay() === 6,
     }
   })
+
   return (
-    <div>
-      <div className='bg-white rounded-lg shadow mt-6 overflow-auto'>
+    <>
+      <div className='bg-white dark:bg-brand text-gray-400 rounded-lg shadow mt-6 overflow-auto'>
         <div className='p-4 '>
-          <h2 className='text-lg font-semibold '>Attendance - {schoolClass}</h2>
+          <h2 className='text-lg font-semibold '>{schoolClass}</h2>
         </div>
 
         <table className='w-full mt-4'>
           <thead className='border-b border-gray-200'>
             <tr className='text-left text-gray-500 text-sm'>
-              <th className='sticky left-0 bg-white border-b border-gray-200  text-sm text-center'>
+              <th className='sticky left-0  border-b border-gray-200  text-sm text-center'>
                 Student
               </th>
 
@@ -47,9 +52,9 @@ const AttendanceGrid = ({
                   key={item.day}
                   className={` text-center min-w-12 border-b border-gray-200  text-sm ${
                     item.isSunday
-                      ? "bg-red-50 text-red-600"
+                      ? "bg-red-50 text-red-600 dark:bg-red-600 dark:text-red-50"
                       : item.isSaturday
-                        ? "bg-yellow-50 text-yellow-700"
+                        ? "bg-yellow-50 text-yellow-700 dark:bg-yellow-700 dark:text-yellow-50"
                         : ""
                   } `}>
                   <div className='text-xs text-gray-500'>{item.weekDay}</div>
@@ -62,28 +67,54 @@ const AttendanceGrid = ({
 
           <tbody>
             {students.map((student) => (
-              <tr
-                key={student.id}
-                className='border-b border-gray-200  text-sm '>
-                <td className='sticky left-0 bg-white border-b border-gray-200  text-sm  p-3 whitespace-nowrap'>
+              <tr key={student.id}>
+                <td className='sticky left-0  border-b border-gray-200  text-sm  p-3 whitespace-nowrap'>
                   {student.firstName} {student.lastName}
-                  <br />
-                  <span className='text-xs'> {student.studentId}</span>
                 </td>
 
-                {dates.map((day) => (
-                  <td
-                    key={day}
-                    className='border-b border-gray-200  text-sm  text-center'>
-                    <AttendanceCell />
-                  </td>
-                ))}
+                {dates.map((day) => {
+                  const currentDate = new Date(year, month, day)
+                  const currentDateString = currentDate
+                    .toISOString()
+                    .split("T")[0]
+
+                  //   console.log(
+                  //     "Student:",
+                  //     student.studentId,
+                  //     "Cell Day:",
+                  //     day,
+                  //     "Attendance:",
+                  //     attendance,
+                  //   )
+
+                  const attendanceRecord = attendance.find((item) => {
+                    const attendanceDate = new Date(item.date)
+
+                    const match =
+                      item.studentId === student.id &&
+                      attendanceDate.getDate() === day
+
+                    return match
+                  })
+
+                  return (
+                    <td
+                      key={day}
+                      className='border-b border-gray-200 text-sm text-center'>
+                      <AttendanceCell
+                        studentId={student.id}
+                        date={new Date(year, month, day)}
+                        status={attendanceRecord?.status}
+                      />
+                    </td>
+                  )
+                })}
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-    </div>
+    </>
   )
 }
 
