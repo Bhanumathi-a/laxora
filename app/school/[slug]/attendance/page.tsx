@@ -51,6 +51,8 @@ const AttendanceList = async ({ params }: Props) => {
               classes={classes}
               students={students}
               subjects={subjects}
+              schoolId={school.id}
+              role='ADMIN'
             />
           </div>
         </div>

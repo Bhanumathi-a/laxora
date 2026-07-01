@@ -18,6 +18,7 @@ model School {
   subjects       Subject[]
   slug           String         @unique
   attendanceMode AttendanceMode @default(DAILY)
+  holidays       Holiday[]
 }
 
 model User {
@@ -60,43 +61,37 @@ model Student {
 }
 
 model Attendance {
-  id     String           @id @default(cuid())
-  date   DateTime
-  status AttendanceStatus
-
+  id        String           @id @default(cuid())
+  date      DateTime
+  status    AttendanceStatus
   studentId String
-  student   Student @relation(fields: [studentId], references: [id])
-
-  createdAt DateTime @default(now())
+  student   Student          @relation(fields: [studentId], references: [id])
+  createdAt DateTime         @default(now())
 
   @@unique([studentId, date])
 }
 
 model Teacher {
-  id        String @id @default(cuid())
-  teacherId String @unique
-  firstName String
-  lastName  String
-  email     String
-  phone     String
-  password  String
-
+  id          String    @id @default(cuid())
+  teacherId   String    @unique
+  firstName   String
+  lastName    String
+  email       String
+  phone       String
+  password    String
   dateOfBirth DateTime?
   bloodGroup  String?
   joiningDate DateTime  @default(now())
-
-  subjects Subject[]
-  image    String?
-
-  schoolId String
-  school   School @relation(fields: [schoolId], references: [id])
-
-  gender  String
-  address String
-  city    String
-  pin     String
-  state   String
-  country String
+  subjects    Subject[]
+  image       String?
+  schoolId    String
+  school      School    @relation(fields: [schoolId], references: [id])
+  gender      String
+  address     String
+  city        String
+  pin         String
+  state       String
+  country     String
 }
 
 model Parent {
@@ -128,17 +123,24 @@ model Class {
 }
 
 model Subject {
-  id   String @id @default(cuid())
-  name String
-
+  id       String    @id @default(cuid())
+  name     String
   schoolId String
-  school   School @relation(fields: [schoolId], references: [id])
-
+  school   School    @relation(fields: [schoolId], references: [id])
   teachers Teacher[]
-
-  classes Class[]
+  classes  Class[]
 
   @@unique([schoolId, name])
+}
+
+model Holiday {
+  id        String      @id @default(cuid())
+  title     String
+  date      DateTime
+  type      HolidayType @default(SCHOOL)
+  schoolId  String
+  school    School      @relation(fields: [schoolId], references: [id])
+  createdAt DateTime    @default(now())
 }
 
 enum Role {
@@ -159,4 +161,9 @@ enum AttendanceStatus {
 enum AttendanceMode {
   DAILY
   SUBJECT_WISE
+}
+
+enum HolidayType {
+  SCHOOL
+  PUBLIC
 }

@@ -3,9 +3,147 @@ import bcrypt from "bcrypt"
 
 const prisma = new PrismaClient()
 
+
+
+
+
 async function main() {
     try {
         console.log("🌱 Seeding started...")
+
+        // const teacherPassword = await bcrypt.hash("teacher123", 10)
+
+        // const teachers = [
+        //     {
+        //         teacherId: "T1001",
+        //         firstName: "Anitha",
+        //         lastName: "Teacher",
+        //         email: "teacher@laxora.com",
+        //         phone: "9000000001",
+        //         gender: "Female",
+        //         subjects: ["English"],
+        //     },
+        //     {
+        //         teacherId: "T1002",
+        //         firstName: "Ravi",
+        //         lastName: "Kumar",
+        //         email: "ravi@laxora.com",
+        //         phone: "9000000002",
+        //         gender: "Male",
+        //         subjects: ["Mathematics"],
+        //     },
+        //     {
+        //         teacherId: "T1003",
+        //         firstName: "Meena",
+        //         lastName: "Rao",
+        //         email: "meena@laxora.com",
+        //         phone: "9000000003",
+        //         gender: "Female",
+        //         subjects: ["Science"],
+        //     },
+        //     {
+        //         teacherId: "T1004",
+        //         firstName: "Prakash",
+        //         lastName: "Gowda",
+        //         email: "prakash@laxora.com",
+        //         phone: "9000000004",
+        //         gender: "Male",
+        //         subjects: ["Kannada", "EVS"],
+        //     },
+        // ]
+        // const createdTeachers: Record<string, string> = {}
+
+        // for (const teacher of teachers) {
+        //     const createdTeacher = await prisma.teacher.upsert({
+        //         where: {
+        //             teacherId: teacher.teacherId,
+        //         },
+        //         update: {},
+        //         create: {
+        //             teacherId: teacher.teacherId,
+        //             firstName: teacher.firstName,
+        //             lastName: teacher.lastName,
+        //             email: teacher.email,
+        //             phone: teacher.phone,
+        //             password: teacherPassword,
+        //             gender: teacher.gender,
+        //             address: "Bangalore",
+        //             city: "Bangalore",
+        //             pin: "560001",
+        //             state: "Karnataka",
+        //             country: "India",
+        //             schoolId: laxora.id,
+        //         },
+        //     })
+
+        //     createdTeachers[teacher.teacherId] = createdTeacher.id
+        // }
+
+        // console.log("✅ Teachers created")
+        // const subjectTeacherMap = [
+        //     { subject: "English", teacher: "T1001" },
+        //     { subject: "Mathematics", teacher: "T1002" },
+        //     { subject: "Science", teacher: "T1003" },
+        //     { subject: "Kannada", teacher: "T1004" },
+        //     { subject: "EVS", teacher: "T1004" },
+        // ]
+
+        // for (const item of subjectTeacherMap) {
+        //     await prisma.subject.update({
+        //         where: {
+        //             schoolId_name: {
+        //                 schoolId: laxora.id,
+        //                 name: item.subject,
+        //             },
+        //         },
+        //         data: {
+        //             teachers: {
+        //                 connect: {
+        //                     id: createdTeachers[item.teacher],
+        //                 },
+        //             },
+        //         },
+        //     })
+        // }
+
+        // console.log("✅ Subjects connected to teachers")
+        // const students = [
+        //     {
+        //         studentId: "ST101",
+        //         firstName: "Bhanumathi",
+        //         lastName: "A",
+        //         classId: class1.id,
+        //         parentId: parent1.id,
+        //     },
+        //     {
+        //         studentId: "ST102",
+        //         firstName: "Savny",
+        //         lastName: "G",
+        //         classId: class1.id,
+        //         parentId: parent2.id,
+        //     },
+        // ]
+        // for (const student of students) {
+        //     await prisma.student.upsert({
+        //         where: {
+        //             studentId: student.studentId,
+        //         },
+        //         update: {},
+        //         create: {
+        //             ...student,
+        //             gender: "Female",
+        //             email: `${student.studentId.toLowerCase()}@laxora.com`,
+        //             phone: "9000000000",
+        //             password: hashedPassword,
+        //             address: "Bangalore",
+        //             city: "Bangalore",
+        //             pin: "560001",
+        //             state: "Karnataka",
+        //             country: "India",
+        //             schoolId: laxora.id,
+        //         },
+        //     })
+        // }
 
         // 🔹 1. Create Schools
         const laxora = await prisma.school.upsert({
@@ -142,6 +280,27 @@ async function main() {
                 phone: "9999999999",
                 password: teacherPassword,
                 gender: "Female",
+                address: "Bangalore",
+                city: "Bangalore",
+                pin: "560001",
+                state: "Karnataka",
+                country: "India",
+                schoolId: laxora.id,
+            },
+        })
+        const teacher2 = await prisma.teacher.upsert({
+            where: {
+                teacherId: "T1002",
+            },
+            update: {},
+            create: {
+                teacherId: "T1002",
+                firstName: "Ravi",
+                lastName: "Kumar",
+                email: "ravi@laxora.com",
+                phone: "9000000002",
+                password: teacherPassword,
+                gender: "Male",
                 address: "Bangalore",
                 city: "Bangalore",
                 pin: "560001",

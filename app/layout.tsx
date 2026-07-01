@@ -18,7 +18,7 @@ export default function RootLayout({
     <html
       suppressHydrationWarning
       lang='en'
-      className={`h-full antialiased bg-background`}>
+      className='h-full antialiased bg-background'>
       <body className='min-h-full flex flex-col'>
         <ThemeProvider>
           {children}

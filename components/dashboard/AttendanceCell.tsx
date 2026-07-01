@@ -2,14 +2,23 @@
 
 import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
+import { Holiday } from "@/types/holiday"
 
 type AttendanceCellProps = {
   studentId: string
   date: Date
   status?: "PRESENT" | "ABSENT"
+  holiday?: Holiday
+  role: "ADMIN" | "TEACHER" | "STUDENT" | "PARENT"
 }
 
-const AttendanceCell = ({ studentId, date, status }: AttendanceCellProps) => {
+const AttendanceCell = ({
+  role,
+  studentId,
+  date,
+  status,
+  holiday,
+}: AttendanceCellProps) => {
   const [currentStatus, setCurrentStatus] = useState(status)
 
   useEffect(() => {
@@ -37,9 +46,24 @@ const AttendanceCell = ({ studentId, date, status }: AttendanceCellProps) => {
       toast.error("Failed to save attendance")
     }
   }
+  const canEdit = role === "ADMIN" || role === "TEACHER"
+  if (holiday) {
+    return <span className='text-red-600 font-semibold'>H</span>
+  }
+  const teacherStates = [undefined, "PRESENT", "ABSENT"] as const
+
+  const adminStates = [undefined, "PRESENT", "ABSENT", "HOLIDAY"] as const
+  const states = role === "ADMIN" ? adminStates : teacherStates
+  const currentIndex = states.indexOf(currentStatus)
+  const nextIndex = (currentIndex + 1) % states.length
+  const newStatus = states[nextIndex]
 
   return (
-    <button onClick={handleClick} className='w-8 h-8 rounded hover:bg-gray-100'>
+    <button
+      disabled={!canEdit}
+      onClick={canEdit ? handleClick : undefined}
+      className={`w-8 h-8 rounded
+      ${canEdit ? "cursor-pointer hover:bg-gray-100" : "cursor-default"}`}>
       {currentStatus === "PRESENT"
         ? "P"
         : currentStatus === "ABSENT"

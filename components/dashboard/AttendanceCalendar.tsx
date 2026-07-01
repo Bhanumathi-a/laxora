@@ -6,16 +6,19 @@ import { Student } from "@/types/student"
 import AttendanceGrid from "./AttendanceGrid"
 import { Subject } from "@/types/subject"
 import { Attendance } from "@/types/attendance"
+import { Holiday } from "@/types/holiday"
 
 type AttendanceCalendarProps = {
+  role: "ADMIN" | "TEACHER" | "STUDENT" | "PARENT"
+  schoolId: string
   classes: SchoolClass[]
   students: Student[]
-
   subjects: Subject[]
 }
 const AttendanceCalendar = ({
+  role,
+  schoolId,
   classes,
-
   students,
   subjects,
 }: AttendanceCalendarProps) => {
@@ -24,6 +27,7 @@ const AttendanceCalendar = ({
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth())
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
   const [attendance, setAttendance] = useState<Attendance[]>([])
+  const [holiday, setHoliday] = useState<Holiday[]>([])
 
   useEffect(() => {
     if (!selectedClass) return
@@ -32,17 +36,27 @@ const AttendanceCalendar = ({
       const res = await fetch(
         `/api/attendance?classId=${selectedClass}&month=${selectedMonth}&year=${selectedYear}`,
       )
-      if (!res.ok) {
-        console.error("Failed to load attendance")
-        return
-      }
+
+      if (!res.ok) return
+
       const data = await res.json()
       setAttendance(data)
-      console.log(data)
+    }
+
+    async function loadHoliday() {
+      const res = await fetch(
+        `/api/holiday?schoolId=${schoolId}&month=${selectedMonth}&year=${selectedYear}`,
+      )
+
+      if (!res.ok) return
+
+      const data = await res.json()
+      setHoliday(data)
     }
 
     loadAttendance()
-  }, [selectedClass, selectedMonth, selectedYear])
+    loadHoliday()
+  }, [selectedClass, selectedMonth, selectedYear, schoolId])
 
   const filteredStudents = React.useMemo(
     () => students.filter((student) => student.classId === selectedClass),
@@ -85,7 +99,7 @@ const AttendanceCalendar = ({
         <div className='flex my-4'>
           <div className=' text-lg font-semibold  '>Attendance</div>
         </div>
-        <div className='flex my-4 gap-4'>
+        <div className='flex flex-col lg:flex-row my-4 gap-4'>
           <select
             value={selectedClass}
             onChange={(e) => setSelectedClass(e.target.value)}
@@ -129,7 +143,7 @@ const AttendanceCalendar = ({
       </h3>
 
       {!currentClass && (
-        <div className='mt-6 rounded-lg border border-dashed bg-white dark:bg-brand border-gray-300 bg-white p-10 text-center text-gray-500'>
+        <div className='mt-6 rounded-lg border border-dashed bg-white dark:bg-brand border-gray-300 p-10 text-center text-gray-500'>
           Please select a class to view attendance.
         </div>
       )}
@@ -138,9 +152,11 @@ const AttendanceCalendar = ({
         <AttendanceGrid
           students={filteredStudents}
           attendance={attendance}
+          holidays={holiday}
           month={selectedMonth}
           year={selectedYear}
           schoolClass={`${currentClass.name} - ${currentClass.section}`}
+          role={role}
         />
       )}
     </>

@@ -2,21 +2,26 @@ import { Student } from "@/types/student"
 import AttendanceCell from "./AttendanceCell"
 
 import { Attendance } from "@/types/attendance"
+import { Holiday } from "@/types/holiday"
 
 type AttendanceGridProps = {
+  role: "ADMIN" | "TEACHER" | "STUDENT" | "PARENT"
   students: Student[]
   attendance: Attendance[]
+  holidays: Holiday[]
   month: number
   year: number
   schoolClass: string
 }
 
 const AttendanceGrid = ({
+  role,
   students,
   month,
   year,
   schoolClass,
   attendance,
+  holidays,
 }: AttendanceGridProps) => {
   const totalDays = new Date(year, month + 1, 0).getDate()
   const dates = Array.from({ length: totalDays }, (_, i) => i + 1)
@@ -77,24 +82,19 @@ const AttendanceGrid = ({
                   const currentDateString = currentDate
                     .toISOString()
                     .split("T")[0]
+                  const holidayRecord = holidays.find((item) => {
+                    const holidayDate = new Date(item.date)
 
-                  //   console.log(
-                  //     "Student:",
-                  //     student.studentId,
-                  //     "Cell Day:",
-                  //     day,
-                  //     "Attendance:",
-                  //     attendance,
-                  //   )
+                    return holidayDate.getDate() === day
+                  })
 
                   const attendanceRecord = attendance.find((item) => {
                     const attendanceDate = new Date(item.date)
 
-                    const match =
+                    return (
                       item.studentId === student.id &&
                       attendanceDate.getDate() === day
-
-                    return match
+                    )
                   })
 
                   return (
@@ -105,6 +105,8 @@ const AttendanceGrid = ({
                         studentId={student.id}
                         date={new Date(year, month, day)}
                         status={attendanceRecord?.status}
+                        role={role}
+                        holiday={holidayRecord}
                       />
                     </td>
                   )
