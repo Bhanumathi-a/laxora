@@ -51,6 +51,7 @@ const AttendanceCalendar = ({
       if (!res.ok) return
 
       const data = await res.json()
+      console.log("Holidays from API:", data)
       setHoliday(data)
     }
 

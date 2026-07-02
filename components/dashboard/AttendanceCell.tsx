@@ -57,6 +57,7 @@ const AttendanceCell = ({
   const currentIndex = states.indexOf(currentStatus)
   const nextIndex = (currentIndex + 1) % states.length
   const newStatus = states[nextIndex]
+  // console.log(holiday)
 
   return (
     <button
