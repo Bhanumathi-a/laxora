@@ -11,6 +11,7 @@ type AttendanceGridProps = {
   month: number
   year: number
   schoolClass: string
+  onHolidayClick: (date: Date, holiday?: Holiday) => void
 }
 
 const AttendanceGrid = ({
@@ -21,6 +22,7 @@ const AttendanceGrid = ({
   month,
   year,
   schoolClass,
+  onHolidayClick,
 }: AttendanceGridProps) => {
   const totalDays = new Date(year, month + 1, 0).getDate()
 
@@ -52,7 +54,7 @@ const AttendanceGrid = ({
       <table className='w-full mt-4'>
         <thead className='border-b border-gray-200'>
           <tr className='text-left text-gray-500 text-sm'>
-            <th className='sticky left-0 bg-white border-b border-gray-200 text-sm text-center'>
+            <th className='sticky left-0 border-b border-gray-200 text-sm text-center'>
               Student
             </th>
 
@@ -71,14 +73,29 @@ const AttendanceGrid = ({
                           ? "bg-yellow-50 text-yellow-700 dark:bg-yellow-700 dark:text-yellow-50"
                           : ""
                   }`}>
-                  <div className='text-xs'>{header.weekDay}</div>
-                  <div className='font-semibold'>{header.day}</div>
-
-                  {holiday && (
-                    <div className='text-[10px] font-normal truncate px-1'>
-                      {holiday.title}
+                  <button
+                    disabled={role !== "ADMIN"}
+                    onClick={() => {
+                      if (role === "ADMIN") {
+                        onHolidayClick(header.date, holiday)
+                      }
+                    }}
+                    className='w-full h-full'>
+                    <div className={`text-xs  ${holiday && "text-red-700"} `}>
+                      {header.weekDay}
                     </div>
-                  )}
+
+                    <div
+                      className={`font-semibold ${holiday && "text-red-700"}`}>
+                      {header.day}
+                    </div>
+
+                    {holiday && (
+                      <div className='text-[10px] text-red-700'>
+                        {holiday.title}
+                      </div>
+                    )}
+                  </button>
                 </th>
               )
             })}
@@ -122,6 +139,7 @@ const AttendanceGrid = ({
                       status={attendanceRecord?.status}
                       holiday={holidayRecord}
                       role={role}
+                      onHolidayClick={onHolidayClick}
                     />
                   </td>
                 )

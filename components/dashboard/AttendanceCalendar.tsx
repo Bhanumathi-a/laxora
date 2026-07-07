@@ -1,12 +1,13 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { SchoolClass } from "@/types/schoolClass"
 import { Student } from "@/types/student"
 import AttendanceGrid from "./AttendanceGrid"
 import { Subject } from "@/types/subject"
 import { Attendance } from "@/types/attendance"
 import { Holiday } from "@/types/holiday"
+import HolidayModal from "./HolidayModal"
 
 type AttendanceCalendarProps = {
   role: "ADMIN" | "TEACHER" | "STUDENT" | "PARENT"
@@ -28,6 +29,20 @@ const AttendanceCalendar = ({
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
   const [attendance, setAttendance] = useState<Attendance[]>([])
   const [holiday, setHoliday] = useState<Holiday[]>([])
+  const [holidayModalOpen, setHolidayModalOpen] = useState(false)
+  const [selectedHoliday, setSelectedHoliday] = useState<Holiday | null>(null)
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null)
+
+  const loadHoliday = useCallback(async () => {
+    const res = await fetch(
+      `/api/holiday?schoolId=${schoolId}&month=${selectedMonth}&year=${selectedYear}`,
+    )
+
+    if (!res.ok) return
+
+    const data = await res.json()
+    setHoliday(data)
+  }, [schoolId, selectedMonth, selectedYear])
 
   useEffect(() => {
     if (!selectedClass) return
@@ -41,18 +56,6 @@ const AttendanceCalendar = ({
 
       const data = await res.json()
       setAttendance(data)
-    }
-
-    async function loadHoliday() {
-      const res = await fetch(
-        `/api/holiday?schoolId=${schoolId}&month=${selectedMonth}&year=${selectedYear}`,
-      )
-
-      if (!res.ok) return
-
-      const data = await res.json()
-      console.log("Holidays from API:", data)
-      setHoliday(data)
     }
 
     loadAttendance()
@@ -93,6 +96,12 @@ const AttendanceCalendar = ({
     value: subject.id,
     label: subject.name,
   }))
+
+  const handleHolidayClick = (date: Date, holiday?: Holiday) => {
+    setSelectedDate(date)
+    setSelectedHoliday(holiday ?? null)
+    setHolidayModalOpen(true)
+  }
 
   return (
     <>
@@ -158,8 +167,17 @@ const AttendanceCalendar = ({
           year={selectedYear}
           schoolClass={`${currentClass.name} - ${currentClass.section}`}
           role={role}
+          onHolidayClick={handleHolidayClick}
         />
       )}
+      <HolidayModal
+        open={holidayModalOpen}
+        setOpen={setHolidayModalOpen}
+        holiday={selectedHoliday}
+        date={selectedDate}
+        schoolId={schoolId}
+        onSaved={loadHoliday}
+      />
     </>
   )
 }

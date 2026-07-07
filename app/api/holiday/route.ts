@@ -35,6 +35,21 @@ export async function POST(req: Request) {
                 { status: 400 }
             )
         }
+        // 
+        const existingHoliday = await prisma.holiday.findFirst({
+            where: {
+                schoolId,
+                date: new Date(date),
+            },
+        })
+
+        if (existingHoliday) {
+            return NextResponse.json(
+                { message: "Holiday already exists for this date" },
+                { status: 400 },
+            )
+        }
+        // 
         const holiday = await prisma.holiday.create({
             data: {
                 title,
