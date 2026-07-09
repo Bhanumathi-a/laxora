@@ -59,6 +59,7 @@ const AttendanceCalendar = ({
     }
 
     loadAttendance()
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadHoliday()
   }, [selectedClass, selectedMonth, selectedYear, schoolId])
 

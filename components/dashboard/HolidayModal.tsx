@@ -25,18 +25,19 @@ const HolidayModal = ({
 
   useEffect(() => {
     if (!open) return
-
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTitle(holiday?.title ?? "")
     setType(holiday?.type ?? "SCHOOL")
   }, [holiday, open])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-
     if (!date) return
-
-    const response = await fetch("/api/holiday", {
-      method: "POST",
+    const isEditing = !!holiday
+    const url = isEditing ? `/api/holiday/${holiday.id}` : "/api/holiday"
+    const method = isEditing ? "PUT" : "POST"
+    const response = await fetch(url, {
+      method,
       headers: {
         "Content-Type": "application/json",
       },
@@ -49,23 +50,33 @@ const HolidayModal = ({
     })
 
     const data = await response.json()
-
     if (!response.ok) {
       toast.error(data.message)
       return
     }
 
-    toast.success("Holiday saved")
-
+    toast.success(isEditing ? "Holiday updated" : "Holiday created")
     setOpen(false)
-
     setTimeout(() => {
       onSaved()
     }, 0)
   }
 
-  const handleDelete = () => {
-    console.log("delete")
+  const handleDelete = async () => {
+    if (!holiday) return
+    const response = await fetch(`/api/holiday/${holiday.id}`, {
+      method: "DELETE",
+    })
+    const data = await response.json()
+    if (!response.ok) {
+      toast.error(data.message)
+      return
+    }
+    toast.success("Holiday deleted")
+    setOpen(false)
+    setTimeout(() => {
+      onSaved()
+    }, 0)
   }
 
   return (
@@ -75,7 +86,7 @@ const HolidayModal = ({
           <div className='space-y-12 scroll-auto'>
             <div className='border-b border-gray-900/10 pb-12'>
               <h2 className='text-base/7 font-semibold text-gray-900'>
-                Holiday
+                {holiday ? "Edit Holiday" : "Add Holiday"}
               </h2>
               <div className='mt-4 grid grid-row gap-x-6 gap-y-8 '>
                 <div className='w-full'>
@@ -90,7 +101,6 @@ const HolidayModal = ({
                   <label className='block mb-2 text-sm font-medium'>
                     Holiday Title
                   </label>
-
                   <input
                     type='text'
                     value={title}
@@ -118,7 +128,6 @@ const HolidayModal = ({
                   className='px-4 py-2 border rounded-lg'>
                   Cancel
                 </button>
-
                 {holiday && (
                   <button
                     type='button'
@@ -127,11 +136,10 @@ const HolidayModal = ({
                     Delete
                   </button>
                 )}
-
                 <button
                   type='submit'
                   className='px-4 py-2 bg-blue-600 text-white rounded-lg'>
-                  Save
+                  {holiday ? "Edit Holiday" : "Add Holiday"}
                 </button>
               </div>
             </div>
@@ -141,5 +149,4 @@ const HolidayModal = ({
     </>
   )
 }
-
 export default HolidayModal
