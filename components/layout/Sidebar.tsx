@@ -1,17 +1,26 @@
+import {
+  superAdminMenu,
+  schoolAdminMenu,
+  teacherMenu,
+  studentMenu,
+  parentMenu,
+} from "@/lib/menu"
+
 type SidebarProps = {
-  role: "SUPER_ADMIN" | "ADMIN" | "STUDENT"
+  role: "SUPER_ADMIN" | "ADMIN" | "TEACHER" | "STUDENT" | "PARENT"
   slug?: string
   schoolName?: string
 }
 
-import { superAdminMenu, schoolAdminMenu, studentMenu } from "@/lib/menu"
 import Link from "next/link"
 
 export default function Sidebar({ role, slug, schoolName }: SidebarProps) {
   const menus = {
     SUPER_ADMIN: superAdminMenu,
     ADMIN: schoolAdminMenu,
+    TEACHER: teacherMenu,
     STUDENT: studentMenu,
+    PARENT: parentMenu,
   }
 
   const menu = menus[role]

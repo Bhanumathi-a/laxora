@@ -103,7 +103,7 @@ const AttendanceCalendar = ({
     setSelectedHoliday(holiday ?? null)
     setHolidayModalOpen(true)
   }
-
+  console.log("Calendar role:", role)
   return (
     <>
       <div>

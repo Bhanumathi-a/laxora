@@ -44,7 +44,7 @@ const AttendanceGrid = ({
   const holidayMap = new Map(
     holidays.map((holiday) => [new Date(holiday.date).getDate(), holiday]),
   )
-
+  console.log("Grid role:", role)
   return (
     <div className='bg-white dark:bg-brand text-gray-400 rounded-lg shadow mt-6 overflow-auto'>
       <div className='p-4'>

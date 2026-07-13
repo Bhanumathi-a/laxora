@@ -71,3 +71,19 @@ export const studentMenu = [
     // },
 ]
 
+export const teacherMenu = [
+    {
+        label: "Dashboard",
+        href: "/",
+        icon: LayoutDashboard,
+    },
+
+]
+export const parentMenu = [
+    {
+        label: "Dashboard",
+        href: "/",
+        icon: LayoutDashboard,
+    },
+
+]

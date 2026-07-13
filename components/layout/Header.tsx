@@ -34,7 +34,7 @@ export const Header = () => {
         </div>
         {/* icons and user */}
         <div className='flex items-center justify-end gap-3 w-full'>
-          <div className='bg-white rounded-full w-7 h-7 flex items-center justify-center cursor-pointer relative'>
+          {/* <div className='bg-white rounded-full w-7 h-7 flex items-center justify-center cursor-pointer relative'>
             <MessageSquare className='text-brand  w-5 h-5' />
             <div className='absolute -top-3 -right-3 w-5 h-5 flex items-center justify-center bg-brand rounded-full text-white text-xs'>
               1
@@ -45,7 +45,7 @@ export const Header = () => {
             <div className='absolute -top-3 -right-3 w-5 h-5 flex items-center justify-center bg-brand rounded-full text-white text-xs'>
               1
             </div>
-          </div>
+          </div> */}
           <div className='flex flex-row'>
             <User />
             <div className='flex flex-col'>
