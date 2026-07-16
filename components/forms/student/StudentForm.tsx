@@ -9,6 +9,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { StudentFormData, studentSchema } from "@/lib/validations/student"
 import toast from "react-hot-toast"
 import { SchoolClass } from "@/types/schoolClass"
+import { Circle, CircleCheckBig } from "lucide-react"
+import FormStepper from "../FormStepper"
+import { studentSteps } from "@/lib/formSteps"
 
 type StudentFormProps = {
   mode: "create" | "edit"
@@ -27,6 +30,7 @@ const StudentForm = ({
   SchoolClasses,
 }: StudentFormProps) => {
   const [loading, setLoading] = useState(false)
+  const [currentStep, setCurrentStep] = useState(0)
 
   const onSubmit = async (data: StudentFormData) => {
     if (mode === "create") {
@@ -145,57 +149,207 @@ const StudentForm = ({
           }
         : {},
   })
+
+  const handlePrevious = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1)
+    }
+  }
+  const handleNext = () => {
+    if (currentStep < 4) {
+      setCurrentStep(currentStep + 1)
+    }
+  }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className='space-y-12 overflow-auto'>
-        <div className='border-b border-gray-900/10 pb-12'>
-          <h2 className='text-base/7 font-semibold text-gray-900'>
+      <div className='space-y-5 overflow-auto'>
+        <div className='border-b border-gray-900/10 pb-5'>
+          <h2 className='text-lg font-semibold text-gray-900'>
             {mode === "create" ? "Register Student" : "Update Student"}
           </h2>
-          <div className='mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
-            <div className='sm:col-span-3'>
+        </div>
+        <FormStepper currentStep={currentStep} />
+      </div>
+      <div className='mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
+        {currentStep === 0 && (
+          <>
+            <div className='sm:col-span-2'>
               <InputField label='First name' {...register("firstName")} />
               {errors.firstName && (
                 <p className='text-red-400'>{errors.firstName.message}</p>
               )}
             </div>
-            <div className='sm:col-span-3'>
+            <div className='sm:col-span-2'>
               <InputField label='Last name' {...register("lastName")} />
               {errors.lastName && (
                 <p className='text-red-400'>{errors.lastName.message}</p>
               )}
             </div>
-            <div className='sm:col-span-3'>
+            <div className='sm:col-span-2'>
               <InputField label='Student ID' {...register("studentId")} />
               {errors.studentId && (
                 <p className='text-red-400'>{errors.studentId.message}</p>
               )}
             </div>
-            <div className='sm:col-span-3'>
+            <div className='sm:col-span-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
+              <div className='sm:col-span-3'>
+                <InputField
+                  label='Student Date of Birth'
+                  type='date'
+                  {...register("dateOfBirth")}
+                />
+                {errors.dateOfBirth && (
+                  <p className='text-red-400'>{errors.dateOfBirth.message}</p>
+                )}
+              </div>
+              <div className='sm:col-span-3'>
+                <SelectField
+                  label='Gender'
+                  name='gender'
+                  options={[
+                    { label: "Male", value: "Male" },
+                    { label: "Female", value: "Female" },
+                    { label: "Other", value: "Other" },
+                  ]}
+                  register={register("gender")}
+                />
+
+                {errors.gender && (
+                  <p className='text-red-400'>{errors.gender.message}</p>
+                )}
+              </div>
+              {mode === "create" && (
+                <>
+                  <div className='sm:col-span-3'>
+                    <InputField
+                      label='Password'
+                      {...register("password")}
+                      type='password'
+                    />
+                    {errors.password && (
+                      <p className='text-red-400'>{errors.password.message}</p>
+                    )}
+                  </div>
+                  <div className='sm:col-span-3'>
+                    <InputField
+                      label='Confirm Password'
+                      {...register("password")}
+                      type='password'
+                    />
+                    {errors.password && (
+                      <p className='text-red-400'>{errors.password.message}</p>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
+            <div className='sm:col-span-2'>
+              <ImageUpload />
+            </div>
+          </>
+        )}
+        {currentStep === 1 && (
+          <>
+            <div className='sm:col-span-2'>
               <InputField
-                label='Student Date of Birth'
-                type='date'
-                {...register("dateOfBirth")}
+                label='Email Address'
+                {...register("email")}
+                type='email'
               />
-              {errors.dateOfBirth && (
-                <p className='text-red-400'>{errors.dateOfBirth.message}</p>
+              {errors.email && (
+                <p className='text-red-400'>{errors.email.message}</p>
               )}
             </div>
-            <div className='sm:col-span-3'>
+
+            <div className='sm:col-span-2'>
+              <InputField label='Mobile Number' {...register("phone")} />
+              {errors.phone && (
+                <p className='text-red-400'>{errors.phone.message}</p>
+              )}
+            </div>
+
+            <div className='sm:col-span-2'>
+              <InputField label='Address' {...register("address")} />
+              {errors.address && (
+                <p className='text-red-400'>{errors.address.message}</p>
+              )}
+            </div>
+            <div className='sm:col-span-2'>
+              <InputField label='City' {...register("city")} />
+              {errors.city && (
+                <p className='text-red-400'>{errors.city.message}</p>
+              )}
+            </div>
+            <div className='sm:col-span-2'>
+              <InputField label='Zip / Pincode' {...register("pin")} />
+              {errors.pin && (
+                <p className='text-red-400'>{errors.pin.message}</p>
+              )}
+            </div>
+            <div className='sm:col-span-2'>
+              <InputField label='State' {...register("state")} />
+              {errors.state && (
+                <p className='text-red-400'>{errors.state.message}</p>
+              )}
+            </div>
+            <div className='sm:col-span-2'>
+              <InputField label='Country' {...register("country")} />
+              {errors.country && (
+                <p className='text-red-400'>{errors.country.message}</p>
+              )}
+            </div>
+          </>
+        )}
+        {currentStep === 2 && (
+          <>
+            <div className='sm:col-span-2'>
               <SelectField
-                label='Gender'
-                name='gender'
-                options={[
-                  { label: "Male", value: "Male" },
-                  { label: "Female", value: "Female" },
-                  { label: "Other", value: "Other" },
-                ]}
-                register={register("gender")}
+                label='Class'
+                name='classId'
+                options={SchoolClasses.map((schoolClass) => ({
+                  label: `${schoolClass.name} - ${schoolClass.section}`,
+                  value: schoolClass.id,
+                }))}
+                register={register("classId")}
               />
-              {errors.gender && (
-                <p className='text-red-400'>{errors.gender.message}</p>
+            </div>
+
+            <div className='sm:col-span-2'>
+              <InputField
+                label='Admission Date'
+                {...register("admissionDate")}
+                type='date'
+              />
+              {errors.admissionDate && (
+                <p className='text-red-400'>{errors.admissionDate.message}</p>
               )}
             </div>
+            <div className='sm:col-span-2'>
+              <InputField
+                label='Previous Class'
+                {...register("previousClass")}
+              />
+              {errors.previousClass && (
+                <p className='text-red-400'>{errors.previousClass.message}</p>
+              )}
+            </div>
+          </>
+        )}
+        {currentStep === 3 && (
+          <>
+            <div className='sm:col-span-2'>
+              <InputField label='Father&#39;s Name' />
+            </div>
+            <div className='sm:col-span-2'>
+              <InputField label='Mother&#39;s Name' />
+            </div>
+            <div className='sm:col-span-2'>
+              <InputField label='Gardien&#39;s Name' />
+            </div>
+          </>
+        )}
+        {currentStep === 4 && (
+          <>
             <div className='sm:col-span-3'>
               <SelectField
                 label='Blood Group'
@@ -216,121 +370,39 @@ const StudentForm = ({
                 <p className='text-red-400'>{errors.bloodGroup.message}</p>
               )}
             </div>
-            {mode === "create" && (
-              <>
-                <div className='sm:col-span-3'>
-                  <InputField
-                    label='Password'
-                    {...register("password")}
-                    type='password'
-                  />
-                  {errors.password && (
-                    <p className='text-red-400'>{errors.password.message}</p>
-                  )}
-                </div>
-                <div className='sm:col-span-3'>
-                  <InputField
-                    label='Confirm Password'
-                    {...register("password")}
-                    type='password'
-                  />
-                  {errors.password && (
-                    <p className='text-red-400'>{errors.password.message}</p>
-                  )}
-                </div>
-              </>
-            )}
-
-            <div className='sm:col-span-3'>
-              <InputField
-                label='Email Address'
-                {...register("email")}
-                type='email'
-              />
-              {errors.email && (
-                <p className='text-red-400'>{errors.email.message}</p>
-              )}
-            </div>
-            <div className='sm:col-span-3'>
-              <InputField label='Mobile Number' {...register("phone")} />
-              {errors.phone && (
-                <p className='text-red-400'>{errors.phone.message}</p>
-              )}
-            </div>
-
-            <div className='col-span-full'>
-              <ImageUpload />
-            </div>
-            <div className='col-span-full'>
-              <InputField label='Address' {...register("address")} />
-              {errors.address && (
-                <p className='text-red-400'>{errors.address.message}</p>
-              )}
-            </div>
-            <div className='sm:col-span-3'>
-              <InputField label='City' {...register("city")} />
-              {errors.city && (
-                <p className='text-red-400'>{errors.city.message}</p>
-              )}
-            </div>
-            <div className='sm:col-span-3'>
-              <InputField label='Zip / Pincode' {...register("pin")} />
-              {errors.pin && (
-                <p className='text-red-400'>{errors.pin.message}</p>
-              )}
-            </div>
-            <div className='sm:col-span-3'>
-              <InputField label='State' {...register("state")} />
-              {errors.state && (
-                <p className='text-red-400'>{errors.state.message}</p>
-              )}
-            </div>
-            <div className='sm:col-span-3'>
-              <InputField label='Country' {...register("country")} />
-              {errors.country && (
-                <p className='text-red-400'>{errors.country.message}</p>
-              )}
-            </div>
-          </div>
-          <h2 className='mt-8 text-base/7 font-semibold text-gray-900 w-full'>
-            Academic Details
-          </h2>
-          <div className='mt-4 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
-            <div className='sm:col-span-3'>
-              <SelectField
-                label='Class'
-                name='classId'
-                options={SchoolClasses.map((schoolClass) => ({
-                  label: `${schoolClass.name} - ${schoolClass.section}`,
-                  value: schoolClass.id,
-                }))}
-                register={register("classId")}
-              />
-            </div>
-            <div className='sm:col-span-3'>
-              <InputField
-                label='Previous Class'
-                {...register("previousClass")}
-              />
-              {errors.previousClass && (
-                <p className='text-red-400'>{errors.previousClass.message}</p>
-              )}
-            </div>
-            <div className='sm:col-span-3'>
-              <InputField
-                label='Admission Date'
-                {...register("admissionDate")}
-                type='date'
-              />
-              {errors.admissionDate && (
-                <p className='text-red-400'>{errors.admissionDate.message}</p>
-              )}
-            </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
       <div className='mt-6 flex items-center justify-end gap-x-6'>
-        <InputButton
+        {currentStep > 0 && (
+          <InputButton
+            title='Previous'
+            type='button'
+            bgColor='bg-brand'
+            textColor='text-white'
+            onClick={handlePrevious}
+          />
+        )}
+
+        {currentStep < 4 ? (
+          <InputButton
+            title='Next'
+            type='button'
+            bgColor='bg-brand'
+            textColor='text-white'
+            onClick={handleNext}
+          />
+        ) : (
+          <InputButton
+            title={mode === "create" ? "Register Student" : "Update Student"}
+            type='submit'
+            bgColor='bg-brand'
+            textColor='text-white'
+            loading={loading}
+          />
+        )}
+
+        {/* <InputButton
           title={mode === "create" ? "Reset" : "Cancel"}
           type='button'
           bgColor='bg-gray-300'
@@ -343,13 +415,7 @@ const StudentForm = ({
             }
           }}
         />
-        <InputButton
-          title={mode === "create" ? "Register Student" : "Update Student"}
-          type='submit'
-          bgColor='bg-brand'
-          textColor='text-white'
-          loading={loading}
-        />
+        */}
       </div>
     </form>
   )

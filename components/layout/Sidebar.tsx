@@ -15,6 +15,7 @@ type SidebarProps = {
 import Link from "next/link"
 
 export default function Sidebar({ role, slug, schoolName }: SidebarProps) {
+  console.log("Sidebar role:", role)
   const menus = {
     SUPER_ADMIN: superAdminMenu,
     ADMIN: schoolAdminMenu,
